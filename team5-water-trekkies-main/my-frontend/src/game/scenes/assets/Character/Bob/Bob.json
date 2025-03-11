@@ -1,0 +1,45 @@
+{
+	"textures": [
+		{
+			"image": "Bob.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 217
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Bob_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 224
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 9,
+						"w": 384,
+						"h": 215
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 215
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7fc007087fec5ae68c520e87ff2c152e:36312cc82d311c86363de15a274eb003:6062d8fb472109eba4b93b67e15af70a$"
+	}
+}

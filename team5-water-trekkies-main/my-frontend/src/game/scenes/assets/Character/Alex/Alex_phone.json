@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Alex_phone.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 146,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Alex_phone_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 144,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 144,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 144,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:b782db87f98648dec2942ba3484fc677:1a0a16bc7e8d054f83fe5c5ebbc27230:5cccbc6e6771e3da51df7562e07b64af$"
+	}
+}

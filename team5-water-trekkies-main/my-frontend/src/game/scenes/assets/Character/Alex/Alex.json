@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Alex.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 217
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Alex_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 224
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 9,
+						"w": 384,
+						"h": 215
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 215
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:a72ec597784da36123a8f7d1564384e9:2c7c1d24ba3a42bde01d685d777b7a28:9a8f86e0417dbca0d2ac6123ccf84ac3$"
+	}
+}

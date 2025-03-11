@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Adam_sit3.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 194,
+				"h": 27
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Adam_sit3_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 7,
+						"w": 192,
+						"h": 25
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 192,
+						"h": 25
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:f72a84a072a3145c9b38a22b6f7a5609:94e9da1616206ce80d9b51a2dc916772:bad31104f351788571bf7acddad32e0d$"
+	}
+}

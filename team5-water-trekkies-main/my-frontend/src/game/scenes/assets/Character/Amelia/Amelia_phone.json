@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Amelia_phone.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 146,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Amelia_phone_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 144,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 144,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 144,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:5aceab3f885fa21d87957aa35f2f3e0b:ac09c6665734d9805eabbda3205f36a8:9baff8aa3ea9052b49c346bffea01d91$"
+	}
+}

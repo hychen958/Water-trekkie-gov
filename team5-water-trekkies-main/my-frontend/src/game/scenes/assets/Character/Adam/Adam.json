@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Adam.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 218
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Adam_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 224
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 384,
+						"h": 216
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 216
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:c3d8bb9c27fb03fdefff9a111755c465:c4a155d08aa2bfe6c40d5181022f78cb:2614bf2a1ab75c5f0f1871023bd2e774$"
+	}
+}

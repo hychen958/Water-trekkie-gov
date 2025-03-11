@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Bob_phone.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 146,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Bob_phone_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 144,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 144,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 144,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:ad976c4e9ecbd3ec8028d9ef521c18a8:bc652efdac7dee51de6e3d0abb028725:0c2b8e16fa01b0788f3b01dec5210a8d$"
+	}
+}

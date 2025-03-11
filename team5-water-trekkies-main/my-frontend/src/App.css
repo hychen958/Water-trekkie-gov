@@ -1,0 +1,496 @@
+/* Overall screen styling */
+.login-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #bdeaff; /* Light aqua background */
+  padding: 20px;
+}
+
+/* Form container */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Title styling */
+.title {
+  font-size: 2rem;
+  color: #0468a3;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Submit button */
+button.submit-btn {
+  background-color: #4ab5e8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button.submit-btn:hover {
+  background-color: #37a7d6;
+  box-shadow: 0px 0px 10px rgba(0, 188, 235, 0.7);
+}
+
+/* Link buttons */
+button.link-btn {
+  background: none;
+  border: none;
+  color: #0468a3;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin: 5px;
+}
+
+button.link-btn:hover {
+  color: #034c72;
+}
+/* Overall screen styling */
+.register-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #bdeaff; /* Light aqua background */
+  padding: 20px;
+}
+
+/* Form container */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Title styling */
+.title {
+  font-size: 2rem;
+  color: #0468a3;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Submit button */
+button.submit-btn {
+  background-color: #4ab5e8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button.submit-btn:hover {
+  background-color: #37a7d6;
+  box-shadow: 0px 0px 10px rgba(0, 188, 235, 0.7);
+}
+
+/* Link buttons */
+button.link-btn {
+  background: none;
+  border: none;
+  color: #0468a3;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin: 5px;
+}
+
+button.link-btn:hover {
+  color: #034c72;
+}
+
+.help-screen {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  text-align: center;
+  background-color: #eaf7fa;
+  border: 2px solid #a2d9d7;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.game-title {
+  font-size: 2rem;
+  color: #0073a5;
+  text-shadow: 1px 1px 2px #ffffff;
+  margin-bottom: 20px;
+}
+
+.instructions {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #0073a5;
+  margin-bottom: 15px;
+}
+
+.game-rules {
+  list-style-type: disc;
+  text-align: left;
+  margin: 0 auto;
+  padding: 0 20px;
+  max-width: 600px;
+  color: #333;
+}
+
+.water-usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+}
+
+.water-usage-table th, .water-usage-table td {
+  border: 1px solid #a2d9d7;
+  padding: 10px;
+  text-align: center;
+}
+
+.water-usage-table th {
+  background-color: #a2d9d7;
+  color: #fff;
+}
+
+.water-usage-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.next-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #0073a5;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.next-button:hover {
+  background-color: #005f82;
+}
+
+.help-screen {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f0f9ff; /* 整體背景改為淺藍 */
+  border: 2px solid #c3e7f8;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.game-title {
+  font-size: 2rem;
+  color: #0073a5; /* 深藍色 */
+  text-shadow: 1px 1px 2px #ffffff;
+  margin-bottom: 20px;
+}
+
+.instructions {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #333; /* 黑色文字，易讀性 */
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #006b8f; /* 稍深的藍色 */
+  margin-bottom: 15px;
+}
+
+.water-usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff; /* 白色表格背景 */
+}
+
+.water-usage-table th, .water-usage-table td {
+  border: 1px solid #0073a5; /* 深藍色邊框 */
+  padding: 10px;
+  text-align: center;
+}
+
+.water-usage-table th {
+  background-color: #0073a5; /* 深藍色 */
+  color: #ffffff; /* 白色字體 */
+}
+
+.water-usage-table tr:nth-child(even) {
+  background-color: #eaf7fa; /* 輕淡藍色間隔行 */
+}
+
+.water-usage-table tr:nth-child(odd) {
+  background-color: #ffffff; /* 白色間隔行 */
+}
+
+.next-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00a0d1; /* 明亮的藍色按鈕 */
+  color: #ffffff; /* 白色字體 */
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.next-button:hover {
+  background-color: #0073a5; /* 按鈕 hover 深藍色 */
+}
+/* Overall screen styling */
+.menu-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #bdeaff; /* Light aqua background */
+  padding: 20px;
+}
+
+/* Menu container */
+.menu-container {
+  background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Title styling */
+.menu-title {
+  font-size: 2.5rem;
+  color: #0468a3;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Button styling */
+.menu-button {
+  display: block;
+  width: 100%;
+  background-color: #4ab5e8;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: #37a7d6;
+  box-shadow: 0px 0px 10px rgba(0, 188, 235, 0.7);
+}
+
+body {
+  background-color: #e6f7ff; /* Light blue background */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.water-game-container {
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.selection-box {
+  background: #ffffff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.dropdown:focus {
+  border-color: #0077cc; /* Focus border effect */
+}
+
+.game-area {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.character-selection-screen {
+  background-color: #37a7d6; /* 统一背景色 */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.9); /* 白色，稍透明 */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #0468a3;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.character-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.character-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  width: 150px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.character-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.character-card.selected {
+  border: 2px solid #37a7d6;
+  box-shadow: 0px 0px 10px rgba(0, 188, 235, 0.7);
+}
+
+.character-image {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.character-name {
+  font-size: 1rem;
+  color: #333;
+}
+
+.complete-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00a0d1;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.complete-button:hover {
+  background-color: #0073a5;
+}
+
+.logout-button-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.logout-button {
+  padding: 8px 16px;
+  background-color: #0073a5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;

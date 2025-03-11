@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Bob_sit2.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 376,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Bob_sit2_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 2,
+						"w": 374,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 374,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:2ef36cd4dd1fb683a52b15fa72d4e199:4a9d20ca0328ec3b71c79098603bd51e:4d125da3ac7b8079c932b0e71d0099c9$"
+	}
+}

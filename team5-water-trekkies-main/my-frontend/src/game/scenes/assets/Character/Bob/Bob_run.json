@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Bob_run.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Bob_run_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 384,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:3fda305f0cf6d90b5a83b5020cdb891b:c0e689fce60f38907c1e58d2ac5b66e0:341d8de6df1ef9da598353c36bd0a117$"
+	}
+}

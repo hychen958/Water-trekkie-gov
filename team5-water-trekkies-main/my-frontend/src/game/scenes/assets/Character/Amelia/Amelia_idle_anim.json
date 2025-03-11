@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Amelia_idle_anim.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Amelia_idle_anim_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 384,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:9adeeb6aa97e9f3dde8ef757412a08a9:a4d9363aefe3cab28b080d4ccc58988d:7060063daf98d99918ba3fd6bff6d5d4$"
+	}
+}

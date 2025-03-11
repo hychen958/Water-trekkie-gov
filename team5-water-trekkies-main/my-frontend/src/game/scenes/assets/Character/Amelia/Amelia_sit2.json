@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Amelia_sit2.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 376,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Amelia_sit2_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 2,
+						"w": 374,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 374,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:28fcf8e554d0a2d52820a7f9bf434123:eda7630867eba01a864266cd1a4d610e:fac62962babc258cb0a317b5faedd192$"
+	}
+}

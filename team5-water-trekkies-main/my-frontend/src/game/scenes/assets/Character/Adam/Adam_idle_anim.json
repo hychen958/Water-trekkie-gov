@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Adam_idle_anim.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 27
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Adam_idle_anim_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 7,
+						"w": 384,
+						"h": 25
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 25
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:bc67b5a333a77901303793c6f76d95d2:10f990aec9c1fd731a314b6c43c317aa:4b653c4c0e4d265a61020cb2cd7f29a7$"
+	}
+}

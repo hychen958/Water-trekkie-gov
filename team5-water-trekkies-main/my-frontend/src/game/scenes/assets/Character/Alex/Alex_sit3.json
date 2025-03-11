@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Alex_sit3.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 192,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Alex_sit3_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 8,
+						"w": 190,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 190,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:ba0e9f369b345f673481df8b6d62e5e7:44b6dd2a4696b51e0d99f99d52607e71:a64154a83c4287a15bf7d9be9bc92d52$"
+	}
+}

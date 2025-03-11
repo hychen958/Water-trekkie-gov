@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Bob_idle_anim.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Bob_idle_anim_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 384,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:1924bbb19de8e653a77f54fc40d9cdad:37ddf837f9e1aa1e3d523c5ead1d793b:1bbde30d369432c707cd2bbaadee3770$"
+	}
+}

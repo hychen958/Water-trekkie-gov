@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Amelia_run.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 386,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Amelia_run_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 384,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 8,
+						"w": 384,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 384,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:e71844aedbd696b336cca943ff8b0fd6:d0c8309e0875ce49911caadc0e6c19dc:5c3016b4d94c28e181c964d6c153d150$"
+	}
+}

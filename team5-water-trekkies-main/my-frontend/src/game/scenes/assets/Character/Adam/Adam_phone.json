@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Adam_phone.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 146,
+				"h": 27
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Adam_phone_16x16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 144,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 7,
+						"w": 144,
+						"h": 25
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 144,
+						"h": 25
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:8fb72d813470b7965b0de1529807b9a0:2cf80a90202b2d07d83016b28fee6d7e:a6941e6efc04bb58939c4e2326df9a72$"
+	}
+}
