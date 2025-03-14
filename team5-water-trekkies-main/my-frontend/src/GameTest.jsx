@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import './app.css'; // Updated CSS file with matching styles
 import { useNavigate } from 'react-router-dom';
+
+
 const WaterUsageGame = () => {
     const gameContainerRef = useRef(null);
     const [dailyLimit, setDailyLimit] = useState(0);
