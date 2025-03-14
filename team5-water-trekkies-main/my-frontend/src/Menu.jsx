@@ -6,8 +6,10 @@ const Menu = () => {
 
   const handleClick = (buttonName) => {
     console.log(`${buttonName} clicked`);
-    if (buttonName === 'Start Game' || buttonName === 'Continue Game') {
+    if (buttonName === 'Start Game') {
       navigate('/gametest');
+    } else if (buttonName === 'Continue Game') {
+      navigate('/gametest'); 
     } else if (buttonName === 'Settings') {
       navigate('/characterselect');
     } else if (buttonName === 'Help') {
@@ -40,6 +42,12 @@ const Menu = () => {
         </button>
         <button
           className="menu-button"
+          onClick={() => handleClick('Continue Game')}
+        >
+          Continue Game
+        </button>
+        <button
+          className="menu-button"
           onClick={() => handleClick('Help')}
         >
           Help
@@ -50,7 +58,6 @@ const Menu = () => {
 };
 
 export default Menu;
-
 
 
 
