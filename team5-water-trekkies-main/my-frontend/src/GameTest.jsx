@@ -55,19 +55,19 @@ const WaterUsageGame = () => {
             'Low-flow showerhead': 40,
             Bathtub: 80,
             Dishwasher: 35,
-            'Front-load washing machine': 65,
+            'Front-load washing ': 65,
             'Watering lawn': 950,
         };
         function preload() {
-            this.load.image('player', 'char1.png');
-            this.load.image('room', 'room.jpg');
-            this.load.image('tap', 'tap.png');
-            this.load.image('toilet', 'toilet.png');
-            this.load.image('shower', 'shower.png');
-            this.load.image('bathtub', 'bathtub.png');
-            this.load.image('dishwasher', 'dishwasher.png');
-            this.load.image('washing_machine', 'washmachine.png');
-            this.load.image('lawn', 'lawn.png');
+            this.load.image('player', 'pics/char1.png');
+            this.load.image('room', 'pics/room.jpg');
+            this.load.image('tap', 'pics/tap.png');
+            this.load.image('toilet', 'pics/toilet.png');
+            this.load.image('shower', 'pics/shower.png');
+            this.load.image('bathtub', 'pics/bathtub.png');
+            this.load.image('dishwasher', 'pics/dishwasher.png');
+            this.load.image('washing_machine', 'pics/washmachine.png');
+            this.load.image('lawn', 'pics/lawn.png');
         }
         function create() {
             this.add.image(400, 300, 'room');
