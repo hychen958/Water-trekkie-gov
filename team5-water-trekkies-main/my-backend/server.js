@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 // init server
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -64,6 +65,8 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 // start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
