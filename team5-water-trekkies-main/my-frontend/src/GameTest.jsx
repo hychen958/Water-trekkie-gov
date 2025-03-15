@@ -1,15 +1,19 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
-import './app.css'; // Updated CSS file with matching styles
-import { useNavigate } from 'react-router-dom';
-
+import './app.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const WaterUsageGame = () => {
     const gameContainerRef = useRef(null);
     const [dailyLimit, setDailyLimit] = useState(0);
     const [options, setOptions] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // 從 location.state 取得傳遞過來的選擇角色資料，如果沒有則使用預設值
+    const selectedCharacter = location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' };
+
+    // 取得 API 資料（選擇水量限制資料）
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -28,8 +32,11 @@ const WaterUsageGame = () => {
         };
         fetchData();
     }, []);
+
     useEffect(() => {
         if (!dailyLimit) return;
+
+        // 使用從角色選擇頁面取得的 selectedCharacter 資料
         const config = {
             type: Phaser.AUTO,
             width: 800,
@@ -37,16 +44,11 @@ const WaterUsageGame = () => {
             parent: gameContainerRef.current,
             physics: {
                 default: 'arcade',
-                arcade: {
-                    debug: false,
-                },
+                arcade: { debug: false },
             },
-            scene: {
-                preload,
-                create,
-                update,
-            },
+            scene: { preload, create, update },
         };
+
         const game = new Phaser.Game(config);
         let player, cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
         let waterUsage = 0;
@@ -60,8 +62,10 @@ const WaterUsageGame = () => {
             'Front-load washing ': 65,
             'Watering lawn': 950,
         };
+
         function preload() {
-            this.load.image('player', 'pics/char1.png');
+            // 這裡使用選擇角色的圖片資源
+            this.load.image('player', selectedCharacter.imgSrc);
             this.load.image('room', 'pics/room.jpg');
             this.load.image('tap', 'pics/tap.png');
             this.load.image('toilet', 'pics/toilet.png');
@@ -71,9 +75,11 @@ const WaterUsageGame = () => {
             this.load.image('washing_machine', 'pics/washmachine.png');
             this.load.image('lawn', 'pics/lawn.png');
         }
+
         function create() {
             this.add.image(400, 300, 'room');
             player = this.physics.add.sprite(400, 300, 'player');
+            player.setScale(0.4);
             player.setCollideWorldBounds(true);
             cursors = this.input.keyboard.createCursorKeys();
             const items = [
@@ -110,12 +116,13 @@ const WaterUsageGame = () => {
                     }
                 });
             });
-            // Display UI texts
+            // 顯示 UI 資訊
             waterUsageText = this.add.text(10, 10, 'Water Usage: 0L', { fontSize: '16px', fill: '#000' });
             dailyLimitText = this.add.text(10, 30, `Daily Limit: ${dailyLimit}L`, { fontSize: '16px', fill: '#000' });
             scoreText = this.add.text(10, 50, 'Score: 0', { fontSize: '16px', fill: '#000' });
             clickCountText = this.add.text(10, 70, 'Clicks Left: 10', { fontSize: '16px', fill: '#000' });
         }
+
         function update() {
             player.setVelocity(0);
             if (cursors.left.isDown) {
@@ -129,11 +136,13 @@ const WaterUsageGame = () => {
                 player.setVelocityY(200);
             }
         }
+
         function updateUI() {
             waterUsageText.setText(`Water Usage: ${waterUsage}L`);
             clickCountText.setText(`Clicks Left: ${10 - clickCount}`);
             scoreText.setText(`Score: ${dailyLimit - waterUsage}L`);
         }
+
         function endGame(result) {
             const message =
                 result === 'fail'
@@ -142,17 +151,16 @@ const WaterUsageGame = () => {
             this.add.text(200, 300, message, { fontSize: '32px', fill: '#000' });
             this.scene.pause();
         }
+
         return () => {
             game.destroy(true);
         };
-    }, [dailyLimit]);
+    }, [dailyLimit, selectedCharacter]);
+
     return (
         <div className="water-game-container">
             <div className="logout-button-container">
-                <button
-                    className="logout-button"
-                    onClick={() => navigate('/login')}
-                >
+                <button className="logout-button" onClick={() => navigate('/login')}>
                     Log Out
                 </button>
             </div>
@@ -161,10 +169,7 @@ const WaterUsageGame = () => {
                 <h3>
                     Water consumption was bad in the old days - easy game level. For challenge, choose the most current dates to see how you compare with your neighbors!
                 </h3>
-                <select
-                    className="dropdown"
-                    onChange={e => setDailyLimit(Number(e.target.value))}
-                >
+                <select className="dropdown" onChange={e => setDailyLimit(Number(e.target.value))}>
                     <option value="">-- Select --</option>
                     {options.map(option => (
                         <option key={option.label} value={option.value}>
@@ -175,14 +180,13 @@ const WaterUsageGame = () => {
             </div>
             <div className="game-area" ref={gameContainerRef}></div>
             <div className="main-menu-button-container">
-                <button
-                    className="main-menu-button"
-                    onClick={() => navigate('/menu')}
-                >
+                <button className="main-menu-button" onClick={() => navigate('/menu')}>
                     Main Menu
                 </button>
             </div>
         </div>
     );
 };
+
 export default WaterUsageGame;
+
