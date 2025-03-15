@@ -22,6 +22,19 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
 
+  // 當玩家點選 Try the Game 時，隨機選取角色資料並導向 /gametest
+  const handleTryGame = () => {
+    const characters = [
+      { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
+      { id: 2, name: 'Alex', imgSrc: '/images/char2.jpg' },
+      { id: 3, name: 'Amelia', imgSrc: '/images/char3.jpg' },
+      { id: 4, name: 'Bob', imgSrc: '/images/char4.jpg' },
+    ];
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    const randomCharacter = characters[randomIndex];
+    navigate('/gametest', { state: { selectedCharacter: randomCharacter } });
+  };
+
   return (
     <div className="login-screen">
       <div className="form-container">
@@ -53,7 +66,7 @@ const Login = ({ setIsAuthenticated }) => {
         </p>
         <p>
           Curious?{' '}
-          <button className="link-btn" onClick={() => navigate('/characterselect')}>
+          <button className="link-btn" onClick={handleTryGame}>
             Try the Game
           </button>
         </p>
@@ -63,5 +76,3 @@ const Login = ({ setIsAuthenticated }) => {
 };
 
 export default Login;
-
-//research popup in react and be able to setup a new user screen//
