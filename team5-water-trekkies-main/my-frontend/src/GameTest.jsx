@@ -7,11 +7,14 @@ const WaterUsageGame = () => {
   const gameContainerRef = useRef(null);
   const [dailyLimit, setDailyLimit] = useState(0);
   const [options, setOptions] = useState([]);
+  const [showTrialPopup, setShowTrialPopup] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   // 取得從 Login 頁面傳遞過來的角色資料，若無則使用預設值
   const selectedCharacter = location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' };
+  // 檢查用戶是否已登錄 - 如果沒有從 Login 頁面傳遞登錄狀態，則視為試用模式
+  const isLoggedIn = location.state?.isLoggedIn || false;
 
   // 取得 API 資料（每日水量限制）
   useEffect(() => {
@@ -35,7 +38,10 @@ const WaterUsageGame = () => {
 
   useEffect(() => {
     if (!dailyLimit) return;
-
+    
+    let gameInstance = null;
+    let gameScene = null;
+    
     const config = {
       type: Phaser.AUTO,
       width: 800,
@@ -43,22 +49,32 @@ const WaterUsageGame = () => {
       parent: gameContainerRef.current,
       physics: {
         default: 'arcade',
-        arcade: { debug: false },
+        arcade: {
+          debug: false,
+        },
       },
-      scene: { preload, create, update },
+      scene: {
+        preload,
+        create,
+        update,
+      },
     };
 
     const game = new Phaser.Game(config);
+    gameInstance = game;
+    
     let player, cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
     let waterUsage = 0;
     let clickCount = 0;
+    let trialModeTimeout;
+    
     const waterData = {
-      Tap: 12,
+      'Tap': 12,
       'Low-flow toilet': 6,
       'Low-flow showerhead': 40,
-      Bathtub: 80,
-      Dishwasher: 35,
-      'Front-load washing ': 65,
+      'Bathtub': 80,
+      'Dishwasher': 35,
+      'Front-load washing machine': 65,
       'Watering lawn': 950,
     };
 
@@ -76,10 +92,12 @@ const WaterUsageGame = () => {
     }
 
     function create() {
+      gameScene = this;
       this.add.image(400, 300, 'room');
       player = this.physics.add.sprite(400, 300, 'player');
       player.setCollideWorldBounds(true);
       cursors = this.input.keyboard.createCursorKeys();
+
       const items = [
         { key: 'tap', x: 100, y: 180, type: 'Tap' },
         { key: 'toilet', x: 700, y: 180, type: 'Low-flow toilet' },
@@ -89,11 +107,13 @@ const WaterUsageGame = () => {
         { key: 'washing_machine', x: 300, y: 100, type: 'Front-load washing machine' },
         { key: 'lawn', x: 400, y: 500, type: 'Watering lawn' },
       ];
+
       const objects = items.map(item => {
         const object = this.physics.add.staticSprite(item.x, item.y, item.key);
         object.type = item.type;
         return object;
       });
+
       let lastActivatedObject = null;
       objects.forEach(object => {
         this.physics.add.overlap(player, object, () => {
@@ -106,6 +126,7 @@ const WaterUsageGame = () => {
             clickCount++;
             waterUsage += waterData[object.type];
             updateUI.call(this);
+            
             if (waterUsage > dailyLimit) {
               endGame.call(this, 'fail');
             } else if (clickCount === 10 && waterUsage <= dailyLimit) {
@@ -114,20 +135,33 @@ const WaterUsageGame = () => {
           }
         });
       });
+
       // 顯示 UI 資訊
       waterUsageText = this.add.text(10, 10, 'Water Usage: 0L', { fontSize: '16px', fill: '#000' });
       dailyLimitText = this.add.text(10, 30, `Daily Limit: ${dailyLimit}L`, { fontSize: '16px', fill: '#000' });
       scoreText = this.add.text(10, 50, 'Score: 0', { fontSize: '16px', fill: '#000' });
       clickCountText = this.add.text(10, 70, 'Clicks Left: 10', { fontSize: '16px', fill: '#000' });
+      
+      // 如果是試用模式，設置1秒後暫停遊戲並顯示彈窗
+      if (!isLoggedIn) {
+        trialModeTimeout = setTimeout(() => {
+          // 暫停遊戲
+          this.scene.pause();
+          // 顯示彈窗
+          setShowTrialPopup(true);
+        }, 1000);
+      }
     }
 
     function update() {
       player.setVelocity(0);
+      
       if (cursors.left.isDown) {
         player.setVelocityX(-200);
       } else if (cursors.right.isDown) {
         player.setVelocityX(200);
       }
+      
       if (cursors.up.isDown) {
         player.setVelocityY(-200);
       } else if (cursors.down.isDown) {
@@ -142,18 +176,20 @@ const WaterUsageGame = () => {
     }
 
     function endGame(result) {
-      const message =
-        result === 'fail'
-          ? 'Game Over! You used too much!'
-          : 'Congratulations! You passed!';
+      const message = result === 'fail' ? 'Game Over! You used too much!' : 'Congratulations! You passed!';
       this.add.text(200, 300, message, { fontSize: '32px', fill: '#000' });
       this.scene.pause();
     }
 
     return () => {
-      game.destroy(true);
+      if (trialModeTimeout) {
+        clearTimeout(trialModeTimeout);
+      }
+      if (gameInstance) {
+        gameInstance.destroy(true);
+      }
     };
-  }, [dailyLimit, selectedCharacter]);
+  }, [dailyLimit, selectedCharacter, isLoggedIn]);
 
   return (
     <div className="water-game-container">
@@ -162,6 +198,7 @@ const WaterUsageGame = () => {
           Log Out
         </button>
       </div>
+      
       <div className="selection-box">
         <label className="title">Select Daily Consumption Limit:</label>
         <h3>
@@ -176,15 +213,27 @@ const WaterUsageGame = () => {
           ))}
         </select>
       </div>
+      
       <div className="game-area" ref={gameContainerRef}></div>
+      
       <div className="main-menu-button-container">
         <button className="main-menu-button" onClick={() => navigate('/menu')}>
           Main Menu
         </button>
       </div>
+      
+      {showTrialPopup && (
+        <div className="trial-popup-overlay">
+          <div className="trial-popup">
+            <h2>Thank you for playing, signup to play more!</h2>
+            <button onClick={() => navigate('/login')}>
+              Go to Login
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default WaterUsageGame;
-
