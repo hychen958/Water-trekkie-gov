@@ -34,12 +34,7 @@ const Menu = () => {
 
       <div className="menu-container">
         <h1 className="menu-title">Main Menu</h1>
-        <button
-          className="menu-button"
-          onClick={() => handleClick('Start Game')}
-        >
-          Start Game
-        </button>
+
         <button
           className="menu-button"
           onClick={() => handleClick('Continue Game')}
