@@ -8,15 +8,18 @@ const WaterUsageGame = () => {
   const [dailyLimit, setDailyLimit] = useState(0);
   const [options, setOptions] = useState([]);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
+  const [loadedGame, setLoadedGame] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   
-  // 取得從 Login 頁面傳遞的角色資料，若無則使用預設值
+  // 取得角色資料，若無則使用預設值
   const selectedCharacter = location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' };
-  // 檢查用戶是否已登入，未登入則為試用模式
-  const isLoggedIn = location.state?.isLoggedIn || false;
+  // 判斷是否登入：優先檢查 location.state 傳遞的 isLoggedIn，否則以 localStorage 判斷
+  const isLoggedIn = (location.state?.isLoggedIn !== undefined) 
+    ? location.state.isLoggedIn 
+    : (localStorage.getItem('token') ? true : false);
 
-  // 取得 API 資料（每日水量限制）
+  // 取得下拉選單資料
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,36 +39,36 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
+  // 若已登入，嘗試載入之前儲存的遊戲狀態
+  useEffect(() => {
+    if (isLoggedIn) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        fetch('http://localhost:5000/api/game/load', {
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data && data.dailyLimit) {
+              setDailyLimit(data.dailyLimit);
+              setLoadedGame(data);
+            }
+          })
+          .catch(err => console.error('Failed to load game state:', err));
+      }
+    }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     if (!dailyLimit) return;
     
     let gameInstance = null;
     let gameScene = null;
-    const config = {
-      type: Phaser.AUTO,
-      width: 800,
-      height: 600,
-      parent: gameContainerRef.current,
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: false,
-        },
-      },
-      scene: {
-        preload,
-        create,
-        update,
-      },
-    };
-
-    const game = new Phaser.Game(config);
-    gameInstance = game;
-    
-    let player, cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
-    let waterUsage = 0;
-    let clickCount = 0;
+    let player;
+    let cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
     let trialModeTimeout;
+    let waterUsage = loadedGame ? loadedGame.waterUsage : 0;
+    let clickCount = loadedGame ? loadedGame.clickCount : 0;
     
     const waterData = {
       'Tap': 12,
@@ -78,7 +81,6 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // 使用角色圖片作為玩家 sprite
       this.load.image('player', selectedCharacter.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
@@ -94,6 +96,11 @@ const WaterUsageGame = () => {
       gameScene = this;
       this.add.image(400, 300, 'room');
       player = this.physics.add.sprite(400, 300, 'player');
+      // 若有儲存過的角色位置，則從記錄中載入
+      if (loadedGame && loadedGame.characterPosition) {
+        player.x = loadedGame.characterPosition.x;
+        player.y = loadedGame.characterPosition.y;
+      }
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
       cursors = this.input.keyboard.createCursorKeys();
@@ -136,13 +143,12 @@ const WaterUsageGame = () => {
         });
       });
 
-      // 顯示 UI 資訊
-      waterUsageText = this.add.text(10, 10, 'Water Usage: 0L', { fontSize: '16px', fill: '#000' });
+      waterUsageText = this.add.text(10, 10, `Water Usage: ${waterUsage}L`, { fontSize: '16px', fill: '#000' });
       dailyLimitText = this.add.text(10, 30, `Daily Limit: ${dailyLimit}L`, { fontSize: '16px', fill: '#000' });
-      scoreText = this.add.text(10, 50, 'Score: 0', { fontSize: '16px', fill: '#000' });
-      clickCountText = this.add.text(10, 70, 'Clicks Left: 10', { fontSize: '16px', fill: '#000' });
+      scoreText = this.add.text(10, 50, `Score: ${dailyLimit - waterUsage}L`, { fontSize: '16px', fill: '#000' });
+      clickCountText = this.add.text(10, 70, `Clicks Left: ${10 - clickCount}`, { fontSize: '16px', fill: '#000' });
       
-      // 如果是試用模式，1秒後暫停遊戲並顯示彈窗
+      // 若非登入狀態，啟動試玩模式：1分鐘後暫停並顯示試玩提示
       if (!isLoggedIn) {
         trialModeTimeout = setTimeout(() => {
           this.scene.pause();
@@ -152,14 +158,13 @@ const WaterUsageGame = () => {
     }
 
     function update() {
+      if (!player) return;
       player.setVelocity(0);
-      
       if (cursors.left.isDown) {
         player.setVelocityX(-200);
       } else if (cursors.right.isDown) {
         player.setVelocityX(200);
       }
-      
       if (cursors.up.isDown) {
         player.setVelocityY(-200);
       } else if (cursors.down.isDown) {
@@ -179,15 +184,38 @@ const WaterUsageGame = () => {
       this.scene.pause();
     }
 
-    return () => {
-      if (trialModeTimeout) {
-        clearTimeout(trialModeTimeout);
-      }
-      if (gameInstance) {
-        gameInstance.destroy(true);
-      }
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      parent: gameContainerRef.current,
+      physics: { default: 'arcade', arcade: { debug: false } },
+      scene: { preload, create, update },
     };
-  }, [dailyLimit, selectedCharacter, isLoggedIn]);
+
+    gameInstance = new Phaser.Game(config);
+
+    return () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const gameData = {
+          dailyLimit: dailyLimit,
+          waterUsage: waterUsage,
+          clickCount: clickCount,
+          score: dailyLimit - waterUsage,
+          characterPosition: player ? { x: player.x, y: player.y } : { x: 0, y: 0 },
+          dropdownData: dailyLimit,
+        };
+        fetch('http://localhost:5000/api/game/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify(gameData),
+        });
+      }
+      if (trialModeTimeout) clearTimeout(trialModeTimeout);
+      if (gameInstance) gameInstance.destroy(true);
+    };
+  }, [dailyLimit, selectedCharacter, isLoggedIn, loadedGame]);
 
   return (
     <div className="water-game-container">
@@ -202,7 +230,7 @@ const WaterUsageGame = () => {
         <h3>
           Water consumption was bad in the old days - easy game level. For challenge, choose the most current dates to see how you compare with your neighbors!
         </h3>
-        <select className="dropdown" onChange={e => setDailyLimit(Number(e.target.value))}>
+        <select className="dropdown" value={dailyLimit} onChange={e => setDailyLimit(Number(e.target.value))}>
           <option value="">-- Select --</option>
           {options.map(option => (
             <option key={option.label} value={option.value}>
@@ -224,9 +252,7 @@ const WaterUsageGame = () => {
         <div className="trial-popup-overlay">
           <div className="trial-popup">
             <h2>Thank you for playing, signup to play more!</h2>
-            <button onClick={() => navigate('/login')}>
-              Go to Login
-            </button>
+            <button onClick={() => navigate('/login')}>Go to Login</button>
           </div>
         </div>
       )}
@@ -235,3 +261,4 @@ const WaterUsageGame = () => {
 };
 
 export default WaterUsageGame;
+

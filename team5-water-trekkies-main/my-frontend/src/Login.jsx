@@ -22,7 +22,7 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
 
-  // 當玩家點選 Try the Game 時，隨機選取角色資料並導向 /gametest
+  // 恢復未登入的 Try the Game 功能：試玩模式設定 isLoggedIn 為 false
   const handleTryGame = () => {
     const characters = [
       { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
@@ -32,7 +32,7 @@ const Login = ({ setIsAuthenticated }) => {
     ];
     const randomIndex = Math.floor(Math.random() * characters.length);
     const randomCharacter = characters[randomIndex];
-    navigate('/gametest', { state: { selectedCharacter: randomCharacter } });
+    navigate('/gametest', { state: { selectedCharacter: randomCharacter, isLoggedIn: false } });
   };
 
   return (
@@ -76,3 +76,4 @@ const Login = ({ setIsAuthenticated }) => {
 };
 
 export default Login;
+
