@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
-import './app.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import './GameTest.css';
 
 const WaterUsageGame = () => {
   const gameContainerRef = useRef(null);
@@ -11,9 +11,9 @@ const WaterUsageGame = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // 取得從 Login 頁面傳遞過來的角色資料，若無則使用預設值
+  // 取得從 Login 頁面傳遞的角色資料，若無則使用預設值
   const selectedCharacter = location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' };
-  // 檢查用戶是否已登錄 - 如果沒有從 Login 頁面傳遞登錄狀態，則視為試用模式
+  // 檢查用戶是否已登入，未登入則為試用模式
   const isLoggedIn = location.state?.isLoggedIn || false;
 
   // 取得 API 資料（每日水量限制）
@@ -41,7 +41,6 @@ const WaterUsageGame = () => {
     
     let gameInstance = null;
     let gameScene = null;
-    
     const config = {
       type: Phaser.AUTO,
       width: 800,
@@ -79,7 +78,7 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // 使用傳入角色的圖片作為玩家 sprite
+      // 使用角色圖片作為玩家 sprite
       this.load.image('player', selectedCharacter.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
@@ -142,14 +141,12 @@ const WaterUsageGame = () => {
       scoreText = this.add.text(10, 50, 'Score: 0', { fontSize: '16px', fill: '#000' });
       clickCountText = this.add.text(10, 70, 'Clicks Left: 10', { fontSize: '16px', fill: '#000' });
       
-      // 如果是試用模式，設置1秒後暫停遊戲並顯示彈窗
+      // 如果是試用模式，1秒後暫停遊戲並顯示彈窗
       if (!isLoggedIn) {
         trialModeTimeout = setTimeout(() => {
-          // 暫停遊戲
           this.scene.pause();
-          // 顯示彈窗
           setShowTrialPopup(true);
-        }, 1000);
+        }, 60000);
       }
     }
 
