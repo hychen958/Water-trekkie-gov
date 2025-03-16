@@ -12,17 +12,36 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await loginUser(formData);
-    if (result.token) {
-      localStorage.setItem('token', result.token);
-      setIsAuthenticated(true);
-      navigate('/menu');
-    } else {
-      alert('Invalid credentials');
+    try {
+      const result = await loginUser(formData);
+      if (result.token) {
+        localStorage.setItem('token', result.token);
+        setIsAuthenticated(true);
+        // 登入成功後，嘗試載入該用戶的遊戲狀態
+        const response = await fetch('http://localhost:5000/api/game/load', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + result.token
+          }
+        });
+        // 若找不到遊戲狀態 (404)，則認定為新用戶，轉跳至角色選擇頁面
+        if (response.status === 404) {
+          navigate('/characterselect');
+        } else {
+          // 已存在遊戲狀態則轉跳至主菜單
+          navigate('/menu');
+        }
+      } else {
+        alert('Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error during login: ', error);
+      alert('Error during login');
     }
   };
 
-  // 恢復未登入的 Try the Game 功能：試玩模式設定 isLoggedIn 為 false
+  // 試玩模式邏輯保持不變
   const handleTryGame = () => {
     const characters = [
       { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
@@ -76,4 +95,3 @@ const Login = ({ setIsAuthenticated }) => {
 };
 
 export default Login;
-
