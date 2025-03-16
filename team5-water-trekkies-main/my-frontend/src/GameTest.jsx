@@ -94,6 +94,7 @@ const WaterUsageGame = () => {
       gameScene = this;
       this.add.image(400, 300, 'room');
       player = this.physics.add.sprite(400, 300, 'player');
+      player.setScale(0.4);
       player.setCollideWorldBounds(true);
       cursors = this.input.keyboard.createCursorKeys();
 
