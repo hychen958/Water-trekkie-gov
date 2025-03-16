@@ -1,3 +1,4 @@
+// server.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -74,23 +75,10 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// --- 新增部分：遊戲狀態儲存與讀取功能 --- //
+// --- 遊戲狀態儲存與讀取功能 --- //
 
-// 定義用於儲存遊戲數據的 Schema
-const gameStateSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
-  characterPosition: {
-    x: { type: Number, default: 0 },
-    y: { type: Number, default: 0 }
-  },
-  dropdownData: { type: Number, default: 0 },
-  waterUsage: { type: Number, default: 0 },
-  dailyLimit: { type: Number, default: 0 },
-  score: { type: Number, default: 0 },
-  clickCount: { type: Number, default: 0 }
-}, { timestamps: true });
-
-const GameState = mongoose.model('GameState', gameStateSchema);
+// 定義用於儲存遊戲數據的 Schema (引用 models/GameState.js)
+const GameState = require('./models/GameState');
 
 // 驗證 JWT 的 middleware
 const verifyToken = (req, res, next) => {
@@ -105,7 +93,8 @@ const verifyToken = (req, res, next) => {
 
 // 儲存遊戲狀態的 API
 app.post('/api/game/save', verifyToken, async (req, res) => {
-  const { dailyLimit, waterUsage, clickCount, score, characterPosition, dropdownData } = req.body;
+  // 從請求中讀取所有數據，包括新增的 selectedCharacter
+  const { dailyLimit, waterUsage, clickCount, score, characterPosition, dropdownData, selectedCharacter } = req.body;
   try {
     let gameState = await GameState.findOne({ user: req.userId });
     if (gameState) {
@@ -116,6 +105,7 @@ app.post('/api/game/save', verifyToken, async (req, res) => {
       gameState.score = score;
       gameState.characterPosition = characterPosition;
       gameState.dropdownData = dropdownData;
+      gameState.selectedCharacter = selectedCharacter;
       await gameState.save();
     } else {
       // 建立新的遊戲狀態紀錄
@@ -126,7 +116,8 @@ app.post('/api/game/save', verifyToken, async (req, res) => {
         clickCount,
         score,
         characterPosition,
-        dropdownData
+        dropdownData,
+        selectedCharacter
       });
       await gameState.save();
     }
@@ -150,7 +141,6 @@ app.get('/api/game/load', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-// --- 新增部分結束 --- //
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });

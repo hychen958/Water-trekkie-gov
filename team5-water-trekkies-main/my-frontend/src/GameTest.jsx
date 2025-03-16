@@ -1,3 +1,4 @@
+// GameTest.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -9,13 +10,14 @@ const WaterUsageGame = () => {
   const [options, setOptions] = useState([]);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
   const [loadedGame, setLoadedGame] = useState(null);
+  // 將角色狀態獨立出來，初始值從 location.state 或預設
+  const [character, setCharacter] = useState(
+    useLocation().state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
+  );
   const navigate = useNavigate();
   const location = useLocation();
   
-  // 取得角色資料，若無則使用預設值
-  const selectedCharacter = location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' };
-  // 判斷是否登入：優先檢查 location.state 傳遞的 isLoggedIn，否則以 localStorage 判斷
-  const isLoggedIn = (location.state?.isLoggedIn !== undefined) 
+  const isLoggedIn = (location.state?.isLoggedIn !== undefined)
     ? location.state.isLoggedIn 
     : (localStorage.getItem('token') ? true : false);
 
@@ -39,7 +41,7 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
-  // 若已登入，嘗試載入之前儲存的遊戲狀態
+  // 若已登入，嘗試載入之前儲存的遊戲狀態，並更新角色資訊
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
@@ -52,6 +54,10 @@ const WaterUsageGame = () => {
             if (data && data.dailyLimit) {
               setDailyLimit(data.dailyLimit);
               setLoadedGame(data);
+              // 若資料庫中有保存角色，則更新角色
+              if(data.selectedCharacter && Object.keys(data.selectedCharacter).length > 0) {
+                setCharacter(data.selectedCharacter);
+              }
             }
           })
           .catch(err => console.error('Failed to load game state:', err));
@@ -63,7 +69,6 @@ const WaterUsageGame = () => {
     if (!dailyLimit) return;
     
     let gameInstance = null;
-    let gameScene = null;
     let player;
     let cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
     let trialModeTimeout;
@@ -81,7 +86,8 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      this.load.image('player', selectedCharacter.imgSrc);
+      // 使用更新後的角色資訊
+      this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
       this.load.image('toilet', 'pics/toilet.png');
@@ -93,10 +99,8 @@ const WaterUsageGame = () => {
     }
 
     function create() {
-      gameScene = this;
       this.add.image(400, 300, 'room');
       player = this.physics.add.sprite(400, 300, 'player');
-      // 若有儲存過的角色位置，則從記錄中載入
       if (loadedGame && loadedGame.characterPosition) {
         player.x = loadedGame.characterPosition.x;
         player.y = loadedGame.characterPosition.y;
@@ -148,7 +152,6 @@ const WaterUsageGame = () => {
       scoreText = this.add.text(10, 50, `Score: ${dailyLimit - waterUsage}L`, { fontSize: '16px', fill: '#000' });
       clickCountText = this.add.text(10, 70, `Clicks Left: ${10 - clickCount}`, { fontSize: '16px', fill: '#000' });
       
-      // 若非登入狀態，啟動試玩模式：1分鐘後暫停並顯示試玩提示
       if (!isLoggedIn) {
         trialModeTimeout = setTimeout(() => {
           this.scene.pause();
@@ -205,6 +208,7 @@ const WaterUsageGame = () => {
           score: dailyLimit - waterUsage,
           characterPosition: player ? { x: player.x, y: player.y } : { x: 0, y: 0 },
           dropdownData: dailyLimit,
+          selectedCharacter: character,
         };
         fetch('http://localhost:5000/api/game/save', {
           method: 'POST',
@@ -215,7 +219,7 @@ const WaterUsageGame = () => {
       if (trialModeTimeout) clearTimeout(trialModeTimeout);
       if (gameInstance) gameInstance.destroy(true);
     };
-  }, [dailyLimit, selectedCharacter, isLoggedIn, loadedGame]);
+  }, [dailyLimit, character, isLoggedIn, loadedGame]);
 
   return (
     <div className="water-game-container">
@@ -261,4 +265,3 @@ const WaterUsageGame = () => {
 };
 
 export default WaterUsageGame;
-
