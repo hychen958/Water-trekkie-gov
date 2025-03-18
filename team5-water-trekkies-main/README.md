@@ -1,3 +1,7 @@
+cd team5-water-trekkies-main
+
+
+
 <b>cd my-frontend</b>
 <b>npm install</b>
 <b>npm run dev</b>

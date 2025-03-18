@@ -12,14 +12,46 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await loginUser(formData);
-    if (result.token) {
-      localStorage.setItem('token', result.token);
-      setIsAuthenticated(true);
-      navigate('/menu');
-    } else {
-      alert('Invalid credentials');
+    try {
+      const result = await loginUser(formData);
+      if (result.token) {
+        localStorage.setItem('token', result.token);
+        setIsAuthenticated(true);
+        // 登入成功後，嘗試載入該用戶的遊戲狀態
+        const response = await fetch('http://localhost:5000/api/game/load', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + result.token
+          }
+        });
+        // 若找不到遊戲狀態 (404)，則認定為新用戶，轉跳至角色選擇頁面
+        if (response.status === 404) {
+          navigate('/characterselect');
+        } else {
+          // 已存在遊戲狀態則轉跳至主菜單
+          navigate('/menu');
+        }
+      } else {
+        alert('Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error during login: ', error);
+      alert('Error during login');
     }
+  };
+
+  // 試玩模式邏輯保持不變
+  const handleTryGame = () => {
+    const characters = [
+      { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
+      { id: 2, name: 'Alex', imgSrc: '/images/char2.jpg' },
+      { id: 3, name: 'Amelia', imgSrc: '/images/char3.jpg' },
+      { id: 4, name: 'Bob', imgSrc: '/images/char4.jpg' },
+    ];
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    const randomCharacter = characters[randomIndex];
+    navigate('/gametest', { state: { selectedCharacter: randomCharacter, isLoggedIn: false } });
   };
 
   return (
@@ -53,7 +85,7 @@ const Login = ({ setIsAuthenticated }) => {
         </p>
         <p>
           Curious?{' '}
-          <button className="link-btn" onClick={() => navigate('/gametest')}>
+          <button className="link-btn" onClick={handleTryGame}>
             Try the Game
           </button>
         </p>
@@ -63,5 +95,3 @@ const Login = ({ setIsAuthenticated }) => {
 };
 
 export default Login;
-
-//research popup in react and be able to setup a new user screen//

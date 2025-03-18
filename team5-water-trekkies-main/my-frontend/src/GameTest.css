@@ -1,0 +1,29 @@
+/* 主要容器 */
+.water-game-container {
+    position: relative;
+    /* 可根據需求調整其他樣式 */
+  }
+  
+  /* 試用彈窗遮罩 */
+  .trial-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 確保在最上層 */
+  }
+  
+  /* 彈窗內容 */
+  .trial-popup {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  

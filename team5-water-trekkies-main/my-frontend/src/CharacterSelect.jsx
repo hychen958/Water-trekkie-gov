@@ -12,25 +12,33 @@
 // App.js
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './app.css';
+
 const characters = [
   { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
   { id: 2, name: 'Alex', imgSrc: '/images/char2.jpg' },
   { id: 3, name: 'Amelia', imgSrc: '/images/char3.jpg' },
   { id: 4, name: 'Bob', imgSrc: '/images/char4.jpg' },
 ];
+
 const CharacterSelection = () => {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const navigate = useNavigate();
+
   const selectCharacter = (character) => {
     setSelectedCharacter(character);
   };
+
   const completeSelection = () => {
     if (selectedCharacter) {
-      alert(`You selected: ${selectedCharacter.name}`);
+      // 傳遞選擇的角色資料到 /gametest 頁面
+      navigate('/gametest', { state: { selectedCharacter } });
     } else {
       alert('Please select a character before proceeding!');
     }
   };
+
   return (
     <div>
       <h1>Select Your Character</h1>
@@ -54,5 +62,6 @@ const CharacterSelection = () => {
     </div>
   );
 };
+
 export default CharacterSelection;
 
