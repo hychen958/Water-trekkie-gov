@@ -4,7 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const GameState = require('../models/GameState');
 
-// 驗證 JWT 的 middleware
+// JWT verification middleware
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'No token provided' });
@@ -15,13 +15,13 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// 儲存遊戲狀態
+// Save game state
 router.post('/save', verifyToken, async (req, res) => {
   const { dailyLimit, waterUsage, clickCount, score, characterPosition, dropdownData } = req.body;
   try {
     let gameState = await GameState.findOne({ user: req.userId });
     if (gameState) {
-      // 更新現有紀錄
+      // Update existing records
       gameState.dailyLimit = dailyLimit;
       gameState.waterUsage = waterUsage;
       gameState.clickCount = clickCount;
@@ -30,7 +30,7 @@ router.post('/save', verifyToken, async (req, res) => {
       gameState.dropdownData = dropdownData;
       await gameState.save();
     } else {
-      // 建立新的遊戲狀態紀錄
+      // Create a new game state record
       gameState = new GameState({
         user: req.userId,
         dailyLimit,
@@ -49,7 +49,7 @@ router.post('/save', verifyToken, async (req, res) => {
   }
 });
 
-// 載入遊戲狀態
+// "Load game state
 router.get('/load', verifyToken, async (req, res) => {
   try {
     const gameState = await GameState.findOne({ user: req.userId });

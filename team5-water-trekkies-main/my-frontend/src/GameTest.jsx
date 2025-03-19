@@ -10,7 +10,7 @@ const WaterUsageGame = () => {
   const [options, setOptions] = useState([]);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
   const [loadedGame, setLoadedGame] = useState(null);
-  // 將角色狀態獨立出來，初始值從 location.state 或預設
+  // Separate the character state, with the initial value coming from location.state or a default value
   const [character, setCharacter] = useState(
     useLocation().state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
   );
@@ -21,7 +21,7 @@ const WaterUsageGame = () => {
     ? location.state.isLoggedIn 
     : (localStorage.getItem('token') ? true : false);
 
-  // 取得下拉選單資料
+  // Get dropdown menu data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +41,7 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
-  // 若已登入，嘗試載入之前儲存的遊戲狀態，並更新角色資訊
+  // If already logged in, try to load the previously saved game state and update the character information
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
@@ -54,7 +54,7 @@ const WaterUsageGame = () => {
             if (data && data.dailyLimit) {
               setDailyLimit(data.dailyLimit);
               setLoadedGame(data);
-              // 若資料庫中有保存角色，則更新角色
+              // If a character is saved in the database, update the character
               if(data.selectedCharacter && Object.keys(data.selectedCharacter).length > 0) {
                 setCharacter(data.selectedCharacter);
               }
@@ -86,7 +86,7 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // 使用更新後的角色資訊
+      // Use the updated character information
       this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');

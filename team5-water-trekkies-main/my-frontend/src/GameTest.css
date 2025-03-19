@@ -1,24 +1,24 @@
-/* 主要容器 */
+/* Main container */
 .water-game-container {
     position: relative;
-    /* 可根據需求調整其他樣式 */
+    /* Other styles can be adjusted as needed */
   }
   
-  /* 試用彈窗遮罩 */
+  /* Try out the popup overlay */
   .trial-popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    background: rgba(0, 0, 0, 0.5); /* Semitransparent background */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* 確保在最上層 */
+    z-index: 1000; /* Ensure at the top layer */
   }
   
-  /* 彈窗內容 */
+  /* Popup content */
   .trial-popup {
     background: #fff;
     padding: 20px;
