@@ -12,7 +12,7 @@ const gameStateSchema = new mongoose.Schema({
   dailyLimit: { type: Number, default: 0 },
   score: { type: Number, default: 0 },
   clickCount: { type: Number, default: 0 },
-  // 新增的角色欄位，儲存使用者選擇的角色資訊
+  // The new role field stores the role information selected by the user.
   selectedCharacter: { type: Object, default: {} }
 }, { timestamps: true });
 

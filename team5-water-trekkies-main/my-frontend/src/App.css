@@ -278,8 +278,8 @@ button.link-btn:hover {
 .next-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #00a0d1; /* 明亮的藍色按鈕 */
-  color: #ffffff; /* 白色字體 */
+  background-color: #00a0d1; /* bright blue background */
+  color: #ffffff; /* white word color */
   border: none;
   border-radius: 5px;
   font-size: 1rem;
@@ -287,7 +287,7 @@ button.link-btn:hover {
 }
 
 .next-button:hover {
-  background-color: #0073a5; /* 按鈕 hover 深藍色 */
+  background-color: #0073a5; /* button hover deepblue */
 }
 /* Overall screen styling */
 .menu-screen {
@@ -395,7 +395,7 @@ body {
 }
 
 .character-selection-screen {
-  background-color: #37a7d6; /* 统一背景色 */
+  background-color: #37a7d6; /* united background color */
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -405,7 +405,7 @@ body {
 }
 
 .container {
-  background-color: rgba(255, 255, 255, 0.9); /* 白色，稍透明 */
+  background-color: rgba(255, 255, 255, 0.9); /* white，slightly transparent */
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);

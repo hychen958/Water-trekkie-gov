@@ -10,16 +10,16 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 中介軟體設定
+// Middleware configuration
 app.use(cors());
 app.use(bodyParser.json());
 
-// 連接 MongoDB
+// connect MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-// --- 原有 User Schema 與 API --- //
+// --- Original User Schema and API --- //
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true }
 }, { timestamps: true });
 
-// 加密密碼
+// Encrypt password
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -38,7 +38,7 @@ userSchema.pre('save', async function (next) {
 
 const User = mongoose.model('User', userSchema);
 
-// 註冊 API
+// register API
 app.post('/api/register', async (req, res) => {
   const { FullName, email, password } = req.body;
   try {
@@ -55,7 +55,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// 登入 API
+// ligin API
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -75,12 +75,12 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// --- 遊戲狀態儲存與讀取功能 --- //
+// --- Game state save and load functionality --- //
 
-// 定義用於儲存遊戲數據的 Schema (引用 models/GameState.js)
+// Define a schema for storing game data (referencing models/GameState.js)
 const GameState = require('./models/GameState');
 
-// 驗證 JWT 的 middleware
+// JWT verification middleware
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
   if (!token) return res.status(401).json({ message: 'No token provided' });
@@ -91,14 +91,14 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// 儲存遊戲狀態的 API
+// API for saving game state
 app.post('/api/game/save', verifyToken, async (req, res) => {
-  // 從請求中讀取所有數據，包括新增的 selectedCharacter
+  // Read all data from the request, including the newly added selectedCharacter
   const { dailyLimit, waterUsage, clickCount, score, characterPosition, dropdownData, selectedCharacter } = req.body;
   try {
     let gameState = await GameState.findOne({ user: req.userId });
     if (gameState) {
-      // 更新現有紀錄
+      // Update existing record
       gameState.dailyLimit = dailyLimit;
       gameState.waterUsage = waterUsage;
       gameState.clickCount = clickCount;
@@ -108,7 +108,7 @@ app.post('/api/game/save', verifyToken, async (req, res) => {
       gameState.selectedCharacter = selectedCharacter;
       await gameState.save();
     } else {
-      // 建立新的遊戲狀態紀錄
+      // Create a new game state record
       gameState = new GameState({
         user: req.userId,
         dailyLimit,
@@ -128,7 +128,7 @@ app.post('/api/game/save', verifyToken, async (req, res) => {
   }
 });
 
-// 載入遊戲狀態的 API
+// API for loading game state
 app.get('/api/game/load', verifyToken, async (req, res) => {
   try {
     const gameState = await GameState.findOne({ user: req.userId });

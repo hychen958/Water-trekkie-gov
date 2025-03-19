@@ -17,7 +17,7 @@ const Login = ({ setIsAuthenticated }) => {
       if (result.token) {
         localStorage.setItem('token', result.token);
         setIsAuthenticated(true);
-        // 登入成功後，嘗試載入該用戶的遊戲狀態
+        // After a successful login, try to load the user's game state
         const response = await fetch('http://localhost:5000/api/game/load', {
           method: 'GET',
           headers: {
@@ -25,11 +25,11 @@ const Login = ({ setIsAuthenticated }) => {
             'Authorization': 'Bearer ' + result.token
           }
         });
-        // 若找不到遊戲狀態 (404)，則認定為新用戶，轉跳至角色選擇頁面
+        // If the game state is not found (404), treat it as a new user and redirect to the character selection page
         if (response.status === 404) {
           navigate('/characterselect');
         } else {
-          // 已存在遊戲狀態則轉跳至主菜單
+          // If a game state already exists, redirect to the main menu
           navigate('/menu');
         }
       } else {
@@ -41,7 +41,7 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
 
-  // 試玩模式邏輯保持不變
+  // Keep the logic of the trial mode unchanged
   const handleTryGame = () => {
     const characters = [
       { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },

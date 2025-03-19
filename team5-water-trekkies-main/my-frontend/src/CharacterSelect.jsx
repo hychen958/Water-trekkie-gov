@@ -32,7 +32,7 @@ const CharacterSelection = () => {
 
   const completeSelection = () => {
     if (selectedCharacter) {
-      // 傳遞選擇的角色資料到 /gametest 頁面
+      // Pass the selected character data to the /gametest page
       navigate('/gametest', { state: { selectedCharacter } });
     } else {
       alert('Please select a character before proceeding!');
