@@ -5,45 +5,45 @@ const MusicPlayer = () => {
   const [volume, setVolume] = useState(0.5); // Default volume 50%
   const audioRef = useRef(null);
 
-  // 播放/暫停切換
+  // Toggle play/pause state
   const togglePlay = () => {
     if (isPlaying) {
-      audioRef.current.pause();
+      audioRef.current.pause(); // Pause the audio if it's playing
     } else {
-      audioRef.current.play();
+      audioRef.current.play(); // Play the audio if it's paused
     }
-    setIsPlaying(!isPlaying);
+    setIsPlaying(!isPlaying); // Toggle the playing state
   };
 
-  // 音量變更
+  // Handle volume change
   const handleVolumeChange = (event) => {
     const volumeValue = event.target.value;
     setVolume(volumeValue);
-    audioRef.current.volume = volumeValue;
+    audioRef.current.volume = volumeValue; // Set audio volume
   };
 
-  // 於組件掛載時自動播放音樂
+  // Automatically play the audio when the component mounts
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch(error => {
-        console.error('Audio playback failed:', error);
+        console.error('Audio playback failed:', error); // Handle error if playback fails
       });
     }
-  }, []); // 空的依賴陣列確保只在組件掛載時觸發
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 10, display: 'flex', alignItems: 'center' }}>
-      {/* 音頻元素 */}
+      {/* Audio element */}
       <audio ref={audioRef} loop>
         <source src="/music.mp3" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
 
-      {/* 播放/停止按鈕 */}
+      {/* Play/Stop button */}
       <button 
         onClick={togglePlay} 
         style={{ 
-          backgroundColor: 'black', // 黑色背景
+          backgroundColor: 'black', // Black button background
           border: 'none', 
           color: 'white', 
           fontSize: '12px', 
@@ -56,13 +56,13 @@ const MusicPlayer = () => {
         }}
       >
         {isPlaying ? (
-          <i className="fa fa-stop"></i> // FontAwesome 停止圖示
+          <i className="fa fa-stop"></i> // FontAwesome Stop Icon
         ) : (
-          <i className="fa fa-play"></i> // FontAwesome 播放圖示
+          <i className="fa fa-play"></i> // FontAwesome Play Icon
         )}
       </button>
 
-      {/* 音量控制 */}
+      {/* Volume control slider */}
       <input
         type="range"
         min="0"
