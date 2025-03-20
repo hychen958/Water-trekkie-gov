@@ -16,7 +16,6 @@ app.use(express.json());
 
 
 // Routes
-// Routes
 app.use('/api', authRoutes); // Register the authentication routes
 
 
