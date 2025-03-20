@@ -497,3 +497,27 @@ body {
 
 
   
+.music-player {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.music-player button {
+  background-color: black;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.music-player input {
+  width: 150px;
+  margin-left: 10px;
+}
