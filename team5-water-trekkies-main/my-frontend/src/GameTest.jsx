@@ -112,6 +112,8 @@ const WaterUsageGame = () => {
       this.load.audio('dishwasherSound', 'sounds/dishwasher.mp3');
       this.load.audio('washing_machineSound', 'sounds/washmachine.mp3');
       this.load.audio('lawnSound', 'sounds/lawn.mp3');
+      // 載入腳步聲音效
+      this.load.audio('footstep', 'sounds/walk.mp3');
     }
 
     function create() {
@@ -124,7 +126,10 @@ const WaterUsageGame = () => {
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
 
-      // 點擊畫布以確保鍵盤可接收事件
+      // 建立腳步聲物件
+      this.footstepSound = this.sound.add('footstep');
+
+      // 點擊畫布以確保鍵盤能接收事件
       this.input.on('pointerdown', () => {
         this.input.keyboard.enabled = true;
       });
@@ -148,7 +153,7 @@ const WaterUsageGame = () => {
         return obj;
       });
 
-      // 對每個物件加入 overlap 事件：只有當觸發的物件與上一次不同時才執行
+      // 為每個物件加入 overlap 事件：只有當觸發的物件與上一次不同時才執行
       objects.forEach(object => {
         this.physics.add.overlap(player, object, () => {
           if (lastTriggeredObject !== object) {
@@ -212,18 +217,33 @@ const WaterUsageGame = () => {
     function update() {
       if (!player) return;
       player.setVelocity(0);
+      let moving = false;
       if (cursors.left.isDown) {
         player.setVelocityX(-200);
+        moving = true;
       } else if (cursors.right.isDown) {
         player.setVelocityX(200);
+        moving = true;
       }
       if (cursors.up.isDown) {
         player.setVelocityY(-200);
+        moving = true;
       } else if (cursors.down.isDown) {
         player.setVelocityY(200);
+        moving = true;
       }
-      // 不再自動重置 lastTriggeredObject，
-      // 只有當玩家觸發另一個物件時才會更新 lastTriggeredObject
+      // 管理腳步聲：若玩家正在移動且腳步聲未播放，則播放循環腳步聲；否則停止
+      if (moving) {
+        if (!this.footstepSound.isPlaying) {
+          this.footstepSound.play({ loop: true });
+        }
+      } else {
+        if (this.footstepSound.isPlaying) {
+          this.footstepSound.stop();
+        }
+      }
+      // 只有當玩家碰到另一個物件時，才會更新 lastTriggeredObject
+      // 這裡不做其他重置處理
     }
 
     function updateUI() {
