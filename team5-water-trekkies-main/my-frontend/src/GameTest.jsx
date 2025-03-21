@@ -1,4 +1,3 @@
-// GameTest.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -10,18 +9,18 @@ const WaterUsageGame = () => {
   const [options, setOptions] = useState([]);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
   const [loadedGame, setLoadedGame] = useState(null);
-  // Separate the character state, with the initial value coming from location.state or a default value
   const [character, setCharacter] = useState(
     useLocation().state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
   );
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const isLoggedIn = (location.state?.isLoggedIn !== undefined)
-    ? location.state.isLoggedIn 
-    : (localStorage.getItem('token') ? true : false);
 
-  // Get dropdown menu data
+  const isLoggedIn =
+    location.state?.isLoggedIn !== undefined
+      ? location.state.isLoggedIn
+      : localStorage.getItem('token') ? true : false;
+
+  // 取得下拉選單資料
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,21 +40,23 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
-  // If already logged in, try to load the previously saved game state and update the character information
+  // 載入遊戲狀態並更新角色資料（若使用者已登入）
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
       if (token) {
         fetch('http://localhost:5000/api/game/load', {
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
         })
           .then(response => response.json())
           .then(data => {
             if (data && data.dailyLimit) {
               setDailyLimit(data.dailyLimit);
               setLoadedGame(data);
-              // If a character is saved in the database, update the character
-              if(data.selectedCharacter && Object.keys(data.selectedCharacter).length > 0) {
+              if (data.selectedCharacter && Object.keys(data.selectedCharacter).length > 0) {
                 setCharacter(data.selectedCharacter);
               }
             }
@@ -66,14 +67,20 @@ const WaterUsageGame = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    // dailyLimit 非 0 時才建立遊戲實例（例如已選取每日限額）
     if (!dailyLimit) return;
-    
+
     let gameInstance = null;
     let player;
     let cursors, waterUsageText, clickCountText, dailyLimitText, scoreText;
     let trialModeTimeout;
     let waterUsage = loadedGame ? loadedGame.waterUsage : 0;
     let clickCount = loadedGame ? loadedGame.clickCount : 0;
+    
+    // 儲存所有物件的陣列
+    let objects = [];
+    // 用來記錄上一次觸發碰撞的物件
+    let lastTriggeredObject = null;
     
     const waterData = {
       'Tap': 12,
@@ -86,7 +93,7 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // Use the updated character information
+      // 載入圖片資源
       this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
@@ -96,6 +103,15 @@ const WaterUsageGame = () => {
       this.load.image('dishwasher', 'pics/dishwasher.png');
       this.load.image('washing_machine', 'pics/washmachine.png');
       this.load.image('lawn', 'pics/lawn.png');
+
+      // 載入音效資源
+      this.load.audio('tapSound', 'sounds/tap.mp3');
+      this.load.audio('toiletSound', 'sounds/toilet.mp3');
+      this.load.audio('showerSound', 'sounds/shower.mp3');
+      this.load.audio('bathtubSound', 'sounds/bath.mp3');
+      this.load.audio('dishwasherSound', 'sounds/dishwasher.mp3');
+      this.load.audio('washing_machineSound', 'sounds/washmachine.mp3');
+      this.load.audio('lawnSound', 'sounds/lawn.mp3');
     }
 
     function create() {
@@ -107,6 +123,12 @@ const WaterUsageGame = () => {
       }
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
+
+      // 點擊畫布以確保鍵盤可接收事件
+      this.input.on('pointerdown', () => {
+        this.input.keyboard.enabled = true;
+      });
+
       cursors = this.input.keyboard.createCursorKeys();
 
       const items = [
@@ -119,25 +141,52 @@ const WaterUsageGame = () => {
         { key: 'lawn', x: 400, y: 500, type: 'Watering lawn' },
       ];
 
-      const objects = items.map(item => {
-        const object = this.physics.add.staticSprite(item.x, item.y, item.key);
-        object.type = item.type;
-        return object;
+      // 建立所有物件
+      objects = items.map(item => {
+        const obj = this.physics.add.staticSprite(item.x, item.y, item.key);
+        obj.type = item.type;
+        return obj;
       });
 
-      let lastActivatedObject = null;
+      // 對每個物件加入 overlap 事件：只有當觸發的物件與上一次不同時才執行
       objects.forEach(object => {
         this.physics.add.overlap(player, object, () => {
-          if (clickCount < 10 && (!object.clicked || lastActivatedObject !== object)) {
-            if (lastActivatedObject) {
-              lastActivatedObject.clicked = false;
-            }
-            object.clicked = true;
-            lastActivatedObject = object;
+          if (lastTriggeredObject !== object) {
+            lastTriggeredObject = object;
             clickCount++;
             waterUsage += waterData[object.type];
             updateUI.call(this);
-            
+
+            let soundKey;
+            switch (object.type) {
+              case 'Tap':
+                soundKey = 'tapSound';
+                break;
+              case 'Low-flow toilet':
+                soundKey = 'toiletSound';
+                break;
+              case 'Low-flow showerhead':
+                soundKey = 'showerSound';
+                break;
+              case 'Bathtub':
+                soundKey = 'bathtubSound';
+                break;
+              case 'Dishwasher':
+                soundKey = 'dishwasherSound';
+                break;
+              case 'Front-load washing machine':
+                soundKey = 'washing_machineSound';
+                break;
+              case 'Watering lawn':
+                soundKey = 'lawnSound';
+                break;
+              default:
+                soundKey = null;
+            }
+            if (soundKey) {
+              this.sound.play(soundKey);
+            }
+
             if (waterUsage > dailyLimit) {
               endGame.call(this, 'fail');
             } else if (clickCount === 10 && waterUsage <= dailyLimit) {
@@ -149,9 +198,9 @@ const WaterUsageGame = () => {
 
       waterUsageText = this.add.text(10, 10, `Water Usage: ${waterUsage}L`, { fontSize: '16px', fill: '#000' });
       dailyLimitText = this.add.text(10, 30, `Daily Limit: ${dailyLimit}L`, { fontSize: '16px', fill: '#000' });
-      scoreText = this.add.text(10, 50, `Score: ${dailyLimit - waterUsage}L`, { fontSize: '16px', fill: '#000' });
+      scoreText = this.add.text(10, 50, `Score: ${waterUsage}L`, { fontSize: '16px', fill: '#000' });
       clickCountText = this.add.text(10, 70, `Clicks Left: ${10 - clickCount}`, { fontSize: '16px', fill: '#000' });
-      
+
       if (!isLoggedIn) {
         trialModeTimeout = setTimeout(() => {
           this.scene.pause();
@@ -173,16 +222,21 @@ const WaterUsageGame = () => {
       } else if (cursors.down.isDown) {
         player.setVelocityY(200);
       }
+      // 不再自動重置 lastTriggeredObject，
+      // 只有當玩家觸發另一個物件時才會更新 lastTriggeredObject
     }
 
     function updateUI() {
       waterUsageText.setText(`Water Usage: ${waterUsage}L`);
       clickCountText.setText(`Clicks Left: ${10 - clickCount}`);
-      scoreText.setText(`Score: ${dailyLimit - waterUsage}L`);
+      scoreText.setText(`Score: ${waterUsage}L`);
     }
 
     function endGame(result) {
-      const message = result === 'fail' ? 'Game Over! You used too much!' : 'Congratulations! You passed!';
+      const message =
+        result === 'fail'
+          ? 'Game Over! You used too much!'
+          : 'Congratulations! You passed!';
       this.add.text(200, 300, message, { fontSize: '32px', fill: '#000' });
       this.scene.pause();
     }
@@ -205,14 +259,17 @@ const WaterUsageGame = () => {
           dailyLimit: dailyLimit,
           waterUsage: waterUsage,
           clickCount: clickCount,
-          score: dailyLimit - waterUsage,
+          score: waterUsage,
           characterPosition: player ? { x: player.x, y: player.y } : { x: 0, y: 0 },
           dropdownData: dailyLimit,
           selectedCharacter: character,
         };
         fetch('http://localhost:5000/api/game/save', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
           body: JSON.stringify(gameData),
         });
       }
@@ -228,7 +285,7 @@ const WaterUsageGame = () => {
           Log Out
         </button>
       </div>
-      
+
       <div className="selection-box">
         <label className="title">Select Daily Consumption Limit:</label>
         <h3>
@@ -243,15 +300,15 @@ const WaterUsageGame = () => {
           ))}
         </select>
       </div>
-      
+
       <div className="game-area" ref={gameContainerRef}></div>
-      
+
       <div className="main-menu-button-container">
         <button className="main-menu-button" onClick={() => navigate('/menu')}>
           Main Menu
         </button>
       </div>
-      
+
       {showTrialPopup && (
         <div className="trial-popup-overlay">
           <div className="trial-popup">
