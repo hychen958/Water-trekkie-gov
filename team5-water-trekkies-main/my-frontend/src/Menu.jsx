@@ -14,7 +14,7 @@ const Menu = () => {
   const navigate = useNavigate();
 
   const handleClick = (buttonName) => {
-    playClickSound(); // 播放音效
+    playClickSound(); // Play sound effect
     console.log(`${buttonName} clicked`);
     if (buttonName === 'Start Game') {
       navigate('/gametest');

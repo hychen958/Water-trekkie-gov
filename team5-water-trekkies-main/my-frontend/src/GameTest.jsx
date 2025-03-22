@@ -29,7 +29,7 @@ const WaterUsageGame = () => {
       ? location.state.isLoggedIn
       : localStorage.getItem('token') ? true : false;
 
-  // 取得下拉選單資料
+  // Retrieve dropdown menu data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,7 +49,7 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
-  // 載入遊戲狀態並更新角色資料（若使用者已登入）
+  // Load game state and update character data (if the user is logged in)
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
@@ -76,7 +76,7 @@ const WaterUsageGame = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    // dailyLimit 非 0 時才建立遊戲實例（例如已選取每日限額）
+    // Only create a game instance when dailyLimit is not 0 (e.g., when the daily limit has been selected)
     if (!dailyLimit) return;
 
     let gameInstance = null;
@@ -86,9 +86,9 @@ const WaterUsageGame = () => {
     let waterUsage = loadedGame ? loadedGame.waterUsage : 0;
     let clickCount = loadedGame ? loadedGame.clickCount : 0;
     
-    // 儲存所有物件的陣列
+    // Save an array of all objects
     let objects = [];
-    // 用來記錄上一次觸發碰撞的物件
+    //Used to record the object that last triggered a collision
     let lastTriggeredObject = null;
     
     const waterData = {
@@ -102,7 +102,7 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // 載入圖片資源
+      // Load image assets
       this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
@@ -113,7 +113,7 @@ const WaterUsageGame = () => {
       this.load.image('washing_machine', 'pics/washmachine.png');
       this.load.image('lawn', 'pics/lawn.png');
 
-      // 載入音效資源
+      // Load sound assets
       this.load.audio('tapSound', 'sounds/tap.mp3');
       this.load.audio('toiletSound', 'sounds/toilet.mp3');
       this.load.audio('showerSound', 'sounds/shower.mp3');
@@ -121,7 +121,7 @@ const WaterUsageGame = () => {
       this.load.audio('dishwasherSound', 'sounds/dishwasher.mp3');
       this.load.audio('washing_machineSound', 'sounds/washmachine.mp3');
       this.load.audio('lawnSound', 'sounds/lawn.mp3');
-      // 載入腳步聲音效
+      // Load footstep sound effect
       this.load.audio('footstep', 'sounds/walk.mp3');
     }
 
@@ -135,10 +135,10 @@ const WaterUsageGame = () => {
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
 
-      // 建立腳步聲物件
+      // Create footstep sound object
       this.footstepSound = this.sound.add('footstep');
 
-      // 點擊畫布以確保鍵盤能接收事件
+      // Click the canvas to ensure the keyboard can receive events
       this.input.on('pointerdown', () => {
         this.input.keyboard.enabled = true;
       });
@@ -155,14 +155,14 @@ const WaterUsageGame = () => {
         { key: 'lawn', x: 400, y: 500, type: 'Watering lawn' },
       ];
 
-      // 建立所有物件
+      // Create all objects
       objects = items.map(item => {
         const obj = this.physics.add.staticSprite(item.x, item.y, item.key);
         obj.type = item.type;
         return obj;
       });
 
-      // 為每個物件加入 overlap 事件：只有當觸發的物件與上一次不同時才執行
+      // Add overlap event for each object: only execute when the triggered object is different from the last one
       objects.forEach(object => {
         this.physics.add.overlap(player, object, () => {
           if (lastTriggeredObject !== object) {
@@ -241,7 +241,7 @@ const WaterUsageGame = () => {
         player.setVelocityY(200);
         moving = true;
       }
-      // 管理腳步聲：若玩家正在移動且腳步聲未播放，則播放循環腳步聲；否則停止
+      // Manage footstep sound: if the player is moving and the footstep sound is not playing, play the looping footstep sound; otherwise, stop it
       if (moving) {
         if (!this.footstepSound.isPlaying) {
           this.footstepSound.play({ loop: true });
@@ -251,8 +251,8 @@ const WaterUsageGame = () => {
           this.footstepSound.stop();
         }
       }
-      // 只有當玩家碰到另一個物件時，才會更新 lastTriggeredObject
-      // 這裡不做其他重置處理
+// Only update lastTriggeredObject when the player collides with another object 
+// No other reset actions are performed here
     }
 
     function updateUI() {
