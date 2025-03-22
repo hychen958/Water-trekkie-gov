@@ -16,9 +16,11 @@ const MusicPlayer = ({ audioSrc }) => {
   };
 
   const handleVolumeChange = (event) => {
-    const volumeValue = event.target.value;
+    const volumeValue = parseFloat(event.target.value);
     setVolume(volumeValue);
-    audioRef.current.volume = volumeValue;
+    if (audioRef.current) {
+      audioRef.current.volume = volumeValue;
+    }
   };
 
   useEffect(() => {

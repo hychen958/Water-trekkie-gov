@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayer from './MusicPlayer';
 import { registerUser } from './api';
 
 const clickSound = new Audio('/sounds/click.mp3');
@@ -31,6 +32,7 @@ const Register = () => {
 
   return (
     <div className="register-screen">
+      <MusicPlayer audioSrc="/music/Daybreak.mp3" />
       <div className="form-container">
         <h1 className="title">Register</h1>
         <form onSubmit={handleSubmit}>
