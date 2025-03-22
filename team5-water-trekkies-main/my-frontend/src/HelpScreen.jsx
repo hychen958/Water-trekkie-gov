@@ -2,6 +2,15 @@
 import React from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+
+const clickSound = new Audio('/sounds/click.mp3');
+clickSound.volume = 0.5;
+
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
+
 function HelpScreen() {
   const navigate = useNavigate();
   return (
@@ -70,8 +79,7 @@ function HelpScreen() {
       <div className="main-menu-button-container">
         <button
           className="main-menu-button"
-          onClick={() => navigate('/menu')}
-        >
+          onClick={() => { playClickSound(); navigate('/menu'); }}>
           Main Menu
         </button>
       </div>

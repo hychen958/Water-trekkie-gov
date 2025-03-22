@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from './api';
 import MusicPlayer from './MusicPlayer';
 
+const clickSound = new Audio('/sounds/click.mp3');
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
 
 const Login = ({ setIsAuthenticated }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -76,19 +81,19 @@ const Login = ({ setIsAuthenticated }) => {
             value={formData.password}
             onChange={handleChange}
           />
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="submit-btn" onClick={playClickSound}>
             Login
           </button>
         </form>
         <p>
           New user?{' '}
-          <button className="link-btn" onClick={() => navigate('/register')}>
+          <button className="link-btn" onClick={() => {playClickSound(); navigate('/register');}}>
             Register here
           </button>
         </p>
         <p>
           Curious?{' '}
-          <button className="link-btn" onClick={handleTryGame}>
+          <button className="link-btn" onClick={() => { playClickSound(); handleTryGame(); }}>
             Try the Game
           </button>
         </p>
