@@ -4,6 +4,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './GameTest.css';
 import MusicPlayer from './MusicPlayer';
 
+const clickSound = new Audio('/sounds/click.mp3');
+clickSound.volume = 0.5;
+
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
 
 const WaterUsageGame = () => {
   const gameContainerRef = useRef(null);
@@ -327,7 +334,7 @@ const WaterUsageGame = () => {
       <div className="game-area" ref={gameContainerRef}></div>
 
       <div className="main-menu-button-container">
-        <button className="main-menu-button" onClick={() => navigate('/menu')}>
+        <button className="main-menu-button" onClick={() => { playClickSound(); navigate('/menu'); }}>
           Main Menu
         </button>
       </div>
@@ -336,7 +343,7 @@ const WaterUsageGame = () => {
         <div className="trial-popup-overlay">
           <div className="trial-popup">
             <h2>Thank you for playing, signup to play more!</h2>
-            <button onClick={() => navigate('/login')}>Go to Login</button>
+            <button onClick={() => { playClickSound(); navigate('/login'); }}>Go to Login</button>
           </div>
         </div>
       )}
