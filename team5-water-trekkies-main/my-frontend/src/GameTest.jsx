@@ -22,24 +22,43 @@ const WaterUsageGame = () => {
     : (localStorage.getItem('token') ? true : false);
 
   // Get dropdown menu data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          'https://data.calgary.ca/resource/j7mp-h975.json?$select=date,daily_consumption_per_capita&$order=date ASC'
-        );
-        const data = await response.json();
-        const formattedOptions = data.map(item => ({
-          label: item.date,
-          value: parseFloat(item.daily_consumption_per_capita),
-        }));
-        setOptions(formattedOptions);
-      } catch (error) {
-        console.error('Failed to fetch data from the API:', error);
+// Automatically set daily limit based on today's date
+useEffect(() => {
+  const fetchAndSetMonthlyAverage = async () => {
+    try {
+      const response = await fetch(
+        'https://data.calgary.ca/resource/j7mp-h975.json?$order=date ASC'
+      );
+      const data = await response.json();
+
+      console.log('Sample API entries:', data.slice(0, 5));
+
+      const today = new Date();
+      const todayMonth = today.getUTCMonth() + 1; // e.g. 3 for March
+
+      const matching = data.filter(item => parseInt(item.monthn) === todayMonth);
+
+      console.log(`Matching entries for month ${todayMonth}:`, matching);
+
+      if (matching.length === 0) {
+        console.warn("No matching data found for this month.");
+        return;
       }
-    };
-    fetchData();
-  }, []);
+
+      const avg = matching.reduce((sum, item) => {
+        return sum + parseFloat(item.daily_consumption_per_capita || 0);
+      }, 0) / matching.length;
+
+      setDailyLimit(avg);
+    } catch (err) {
+      console.error("Failed to fetch and calculate monthly average limit:", err);
+    }
+  };
+
+  fetchAndSetMonthlyAverage();
+}, []);
+
+
 
   // If already logged in, try to load the previously saved game state and update the character information
   useEffect(() => {
@@ -228,30 +247,19 @@ const WaterUsageGame = () => {
           Log Out
         </button>
       </div>
-      
+  
       <div className="selection-box">
-        <label className="title">Select Daily Consumption Limit:</label>
         <h3>
-          Water consumption was bad in the old days - easy game level. For challenge, choose the most current dates to see how you compare with your neighbors!
+          Your water challenge today is based on the average daily consumption for this day in history.
         </h3>
-        <select className="dropdown" value={dailyLimit} onChange={e => setDailyLimit(Number(e.target.value))}>
-          <option value="">-- Select --</option>
-          {options.map(option => (
-            <option key={option.label} value={option.value}>
-              {option.label}: {option.value}L
-            </option>
-          ))}
-        </select>
+        <p>
+          <strong>{Math.round(dailyLimit)}L</strong> is your target for today.
+        </p>
       </div>
-      
-      <div className="game-area" ref={gameContainerRef}></div>
-      
-      <div className="main-menu-button-container">
-        <button className="main-menu-button" onClick={() => navigate('/menu')}>
-          Main Menu
-        </button>
-      </div>
-      
+  
+      {/* 👇👇 ADD THIS BACK */}
+      <div className="game-area" id="game-container" ref={gameContainerRef}></div>
+  
       {showTrialPopup && (
         <div className="trial-popup-overlay">
           <div className="trial-popup">
@@ -262,6 +270,7 @@ const WaterUsageGame = () => {
       )}
     </div>
   );
+  
 };
 
 export default WaterUsageGame;
