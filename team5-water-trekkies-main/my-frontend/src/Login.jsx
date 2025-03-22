@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from './api';
+import MusicPlayer from './MusicPlayer';
+
 
 const Login = ({ setIsAuthenticated }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -56,6 +58,7 @@ const Login = ({ setIsAuthenticated }) => {
 
   return (
     <div className="login-screen">
+       <MusicPlayer audioSrc="/music/Daybreak.mp3" />
       <div className="form-container">
         <h1 className="title">Login</h1>
         <form onSubmit={handleSubmit}>

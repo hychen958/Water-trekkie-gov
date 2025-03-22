@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './GameTest.css';
+import MusicPlayer from './MusicPlayer';
+
 
 const WaterUsageGame = () => {
   const gameContainerRef = useRef(null);
@@ -300,6 +302,7 @@ const WaterUsageGame = () => {
 
   return (
     <div className="water-game-container">
+            <MusicPlayer audioSrc="/music/California.mp3" />
       <div className="logout-button-container">
         <button className="logout-button" onClick={() => navigate('/login')}>
           Log Out

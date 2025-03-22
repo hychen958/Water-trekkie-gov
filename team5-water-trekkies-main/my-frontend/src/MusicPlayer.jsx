@@ -1,80 +1,46 @@
+// MusicPlayer.jsx
 import React, { useState, useRef, useEffect } from 'react';
 
-const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(true); // Default to true for autoplay
-  const [volume, setVolume] = useState(0.5); // Default volume 50%
+const MusicPlayer = ({ audioSrc }) => {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [volume, setVolume] = useState(0.5);
   const audioRef = useRef(null);
 
-  // Toggle play/pause state
   const togglePlay = () => {
     if (isPlaying) {
-      audioRef.current.pause(); // Pause the audio if it's playing
+      audioRef.current.pause();
     } else {
-      audioRef.current.play(); // Play the audio if it's paused
+      audioRef.current.play();
     }
-    setIsPlaying(!isPlaying); // Toggle the playing state
+    setIsPlaying(!isPlaying);
   };
 
-  // Handle volume change
   const handleVolumeChange = (event) => {
     const volumeValue = event.target.value;
     setVolume(volumeValue);
-    audioRef.current.volume = volumeValue; // Set audio volume
+    audioRef.current.volume = volumeValue;
   };
 
-  // Automatically play the audio when the component mounts
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play().catch(error => {
-        console.error('Audio playback failed:', error); // Handle error if playback fails
+        console.error('Audio playback failed:', error);
       });
     }
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [audioSrc]); // 在 audioSrc 改變時重新播放音樂
 
   return (
     <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 10, display: 'flex', alignItems: 'center' }}>
-      {/* Audio element */}
       <audio ref={audioRef} loop>
-        <source src="/music.mp3" type="audio/mp3" />
+        <source src={audioSrc} type="audio/wav" />
         Your browser does not support the audio element.
       </audio>
-
-      {/* Play/Stop button */}
-      <button 
-        onClick={togglePlay} 
-        style={{ 
-          backgroundColor: 'black', // Black button background
-          border: 'none', 
-          color: 'white', 
-          fontSize: '12px', 
-          cursor: 'pointer', 
-          marginRight: '2px',
-          padding: '2px',
-          borderRadius: '1px',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        {isPlaying ? (
-          <i className="fa fa-stop"></i> // FontAwesome Stop Icon
-        ) : (
-          <i className="fa fa-play"></i> // FontAwesome Play Icon
-        )}
+      <button onClick={togglePlay} style={{ backgroundColor: 'black', border: 'none', color: 'white', fontSize: '12px', cursor: 'pointer', marginRight: '2px', padding: '2px', borderRadius: '1px', display: 'flex', alignItems: 'center' }}>
+        {isPlaying ? <i className="fa fa-stop"></i> : <i className="fa fa-play"></i>}
       </button>
-
-      {/* Volume control slider */}
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value={volume}
-        onChange={handleVolumeChange}
-        style={{ width: '150px', marginLeft: '10px' }}
-      />
+      <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} style={{ width: '150px', marginLeft: '10px' }} />
     </div>
   );
 };
 
 export default MusicPlayer;
-
