@@ -2,6 +2,7 @@
 import React from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayer from './MusicPlayer';
 
 const clickSound = new Audio('/sounds/click.mp3');
 clickSound.volume = 0.5;
@@ -15,6 +16,7 @@ function HelpScreen() {
   const navigate = useNavigate();
   return (
     <div className="help-screen">
+      <MusicPlayer audioSrc="/music/Penn.mp3"></MusicPlayer>
       <h1 className="game-title">Welcome to the Water Conservation Game!</h1>
       <p className="instructions">
         Your mission is to manage daily water consumption and stay within the allocated limit. 

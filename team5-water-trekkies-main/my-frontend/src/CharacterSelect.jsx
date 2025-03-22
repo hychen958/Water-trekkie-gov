@@ -13,6 +13,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayer from './MusicPlayer';
 import './app.css';
 
 const clickSound = new Audio('/sounds/click.mp3');
@@ -49,6 +50,7 @@ const CharacterSelection = () => {
 
   return (
     <div>
+       <MusicPlayer audioSrc="/music/Penn.mp3" />
       <h1>Select Your Character</h1>
       <div className="container">
         <div className="character-grid">
