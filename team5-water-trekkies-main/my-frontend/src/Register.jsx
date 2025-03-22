@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayer from './MusicPlayer';
 import { registerUser } from './api';
+
+const clickSound = new Audio('/sounds/click.mp3');
+clickSound.volume = 0.5;
+
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
 
 const Register = () => {
   const [formData, setFormData] = useState({ FullName: '', email: '', password: '' });
@@ -23,6 +32,7 @@ const Register = () => {
 
   return (
     <div className="register-screen">
+      <MusicPlayer audioSrc="/music/Daybreak.mp3" />
       <div className="form-container">
         <h1 className="title">Register</h1>
         <form onSubmit={handleSubmit}>
@@ -47,11 +57,11 @@ const Register = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <button type="submit" className="submit-btn">Register</button>
+          <button type="submit" className="submit-btn"onClick={playClickSound}>Register</button>
         </form>
         <p>
           Already have an account?{' '}
-          <button className="link-btn" onClick={() => navigate('/login')}>
+          <button className="link-btn" onClick={() =>  { playClickSound(); navigate('/login'); }}>
             Login here
           </button>
         </p>

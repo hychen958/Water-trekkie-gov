@@ -13,7 +13,16 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayer from './MusicPlayer';
 import './app.css';
+
+const clickSound = new Audio('/sounds/click.mp3');
+clickSound.volume = 0.5;
+
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
 
 const characters = [
   { id: 1, name: 'Adam', imgSrc: './images/char1.jpg' },
@@ -41,6 +50,7 @@ const CharacterSelection = () => {
 
   return (
     <div>
+       <MusicPlayer audioSrc="/music/Penn.mp3" />
       <h1>Select Your Character</h1>
       <div className="container">
         <div className="character-grid">
@@ -48,14 +58,14 @@ const CharacterSelection = () => {
             <div
               key={character.id}
               className={`character-card ${selectedCharacter?.id === character.id ? 'selected' : ''}`}
-              onClick={() => selectCharacter(character)}
+              onClick={() => { playClickSound(); selectCharacter(character); }}
             >
               <img src={character.imgSrc} alt={character.name} />
               <p>{character.name}</p>
             </div>
           ))}
         </div>
-        <button className="complete-button" onClick={completeSelection}>
+        <button className="complete-button" onClick ={() => { playClickSound(); completeSelection(); }}>
           Complete
         </button>
       </div>

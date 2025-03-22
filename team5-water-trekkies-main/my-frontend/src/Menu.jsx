@@ -1,10 +1,20 @@
 import React from 'react';
+import MusicPlayer from './MusicPlayer';
 import { useNavigate } from 'react-router-dom';
+
+const clickSound = new Audio('/sounds/click.mp3');
+clickSound.volume = 0.5;
+
+const playClickSound = () => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+};
 
 const Menu = () => {
   const navigate = useNavigate();
 
   const handleClick = (buttonName) => {
+    playClickSound(); // Play sound effect
     console.log(`${buttonName} clicked`);
     if (buttonName === 'Start Game') {
       navigate('/gametest');
@@ -22,6 +32,7 @@ const Menu = () => {
 
   return (
     <div className="menu-screen">
+            <MusicPlayer audioSrc="/music/Penn.mp3" />
       {/* Log Out Button in the Top Right Corner */}
       <div className="logout-button-container">
         <button

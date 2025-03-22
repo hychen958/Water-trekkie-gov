@@ -1,0 +1,32 @@
+/* MusicPlayer.css */
+.music-player-fixed {
+    position: fixed;
+    top: 20px; /* top left */
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .music-player-fixed button {
+    background-color: #0073a5;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .music-player-fixed button:hover {
+    background-color: #005f82;
+  }
+  
+  .music-player-fixed input[type="range"] {
+    width: 100px;
+  }
+  
