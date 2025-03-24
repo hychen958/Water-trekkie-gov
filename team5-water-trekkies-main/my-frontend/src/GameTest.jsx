@@ -112,6 +112,13 @@ const WaterUsageGame = () => {
       this.load.image('dishwasher', 'pics/dishwasher.png');
       this.load.image('washing_machine', 'pics/washmachine.png');
       this.load.image('lawn', 'pics/lawn.png');
+      this.load.image('1', 'pics/1.png');
+      this.load.image('2', 'pics/2.png');
+      this.load.image('3', 'pics/3.png');
+      this.load.image('4', 'pics/4.png');
+      this.load.image('5', 'pics/5.png');
+      this.load.image('6', 'pics/6.png');
+
 
       // Load sound assets
       this.load.audio('tapSound', 'sounds/tap.mp3');
@@ -153,6 +160,12 @@ const WaterUsageGame = () => {
         { key: 'dishwasher', x: 500, y: 100, type: 'Dishwasher' },
         { key: 'washing_machine', x: 300, y: 100, type: 'Front-load washing machine' },
         { key: 'lawn', x: 400, y: 500, type: 'Watering lawn' },
+        { key: '1', x: 232, y: 47, type: '1' },
+        { key: '2', x: 592, y: 47, type: '2' },
+        { key: '3', x: 232, y: 360, type: '3' },
+        { key: '4', x: 592, y: 359, type: '4' },
+        { key: '5', x: 105, y: 351, type: '5' },
+        { key: '6', x: 720, y: 330, type: '6' },
       ];
 
       // Create all objects
