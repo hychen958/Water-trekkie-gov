@@ -29,7 +29,6 @@ const WaterUsageGame = () => {
       ? location.state.isLoggedIn
       : localStorage.getItem('token') ? true : false;
 
-  // Retrieve dropdown menu data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,7 +48,6 @@ const WaterUsageGame = () => {
     fetchData();
   }, []);
 
-  // Load game state and update character data (if the user is logged in)
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
@@ -76,7 +74,6 @@ const WaterUsageGame = () => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    // Only create a game instance when dailyLimit is not 0 (e.g., when the daily limit has been selected)
     if (!dailyLimit) return;
 
     let gameInstance = null;
@@ -85,12 +82,9 @@ const WaterUsageGame = () => {
     let trialModeTimeout;
     let waterUsage = loadedGame ? loadedGame.waterUsage : 0;
     let clickCount = loadedGame ? loadedGame.clickCount : 0;
-    
-    // Save an array of all objects
     let objects = [];
-    //Used to record the object that last triggered a collision
     let lastTriggeredObject = null;
-    
+
     const waterData = {
       'Tap': 12,
       'Low-flow toilet': 6,
@@ -102,7 +96,6 @@ const WaterUsageGame = () => {
     };
 
     function preload() {
-      // Load image assets
       this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
       this.load.image('tap', 'pics/tap.png');
@@ -119,8 +112,6 @@ const WaterUsageGame = () => {
       this.load.image('5', 'pics/5.png');
       this.load.image('6', 'pics/6.png');
 
-
-      // Load sound assets
       this.load.audio('tapSound', 'sounds/tap.mp3');
       this.load.audio('toiletSound', 'sounds/toilet.mp3');
       this.load.audio('showerSound', 'sounds/shower.mp3');
@@ -128,7 +119,6 @@ const WaterUsageGame = () => {
       this.load.audio('dishwasherSound', 'sounds/dishwasher.mp3');
       this.load.audio('washing_machineSound', 'sounds/washmachine.mp3');
       this.load.audio('lawnSound', 'sounds/lawn.mp3');
-      // Load footstep sound effect
       this.load.audio('footstep', 'sounds/walk.mp3');
     }
 
@@ -142,14 +132,8 @@ const WaterUsageGame = () => {
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
 
-      // Create footstep sound object
       this.footstepSound = this.sound.add('footstep');
-
-      // Click the canvas to ensure the keyboard can receive events
-      this.input.on('pointerdown', () => {
-        this.input.keyboard.enabled = true;
-      });
-
+      this.input.on('pointerdown', () => { this.input.keyboard.enabled = true; });
       cursors = this.input.keyboard.createCursorKeys();
 
       const items = [
@@ -159,68 +143,54 @@ const WaterUsageGame = () => {
         { key: 'bathtub', x: 700, y: 500, type: 'Bathtub' },
         { key: 'dishwasher', x: 500, y: 100, type: 'Dishwasher' },
         { key: 'washing_machine', x: 300, y: 100, type: 'Front-load washing machine' },
-        { key: 'lawn', x: 400, y: 500, type: 'Watering lawn' },
-        { key: '1', x: 232, y: 47, type: '1' },
-        { key: '2', x: 592, y: 47, type: '2' },
-        { key: '3', x: 232, y: 360, type: '3' },
-        { key: '4', x: 592, y: 359, type: '4' },
-        { key: '5', x: 105, y: 351, type: '5' },
-        { key: '6', x: 720, y: 330, type: '6' },
+        { key: 'lawn', x: 410, y: 550, type: 'Watering lawn' },
+        { key: '1', x: 232, y: 47, type: '1', isWall: true },
+        { key: '2', x: 592, y: 47, type: '2', isWall: true },
+        { key: '3', x: 232, y: 360, type: '3', isWall: true },
+        { key: '4', x: 592, y: 359, type: '4', isWall: true },
+        { key: '5', x: 105, y: 351, type: '5', isWall: true },
+        { key: '6', x: 720, y: 330, type: '6', isWall: true },
       ];
 
-      // Create all objects
       objects = items.map(item => {
-        const obj = this.physics.add.staticSprite(item.x, item.y, item.key);
-        obj.type = item.type;
-        return obj;
+        if (item.isWall) {
+          const wall = this.physics.add.staticImage(item.x, item.y, item.key);
+          wall.type = item.type;
+          this.physics.add.collider(player, wall);
+          return wall;
+        } else {
+          const obj = this.physics.add.staticSprite(item.x, item.y, item.key);
+          obj.type = item.type;
+          return obj;
+        }
       });
 
-      // Add overlap event for each object: only execute when the triggered object is different from the last one
       objects.forEach(object => {
-        this.physics.add.overlap(player, object, () => {
-          if (lastTriggeredObject !== object) {
-            lastTriggeredObject = object;
-            clickCount++;
-            waterUsage += waterData[object.type];
-            updateUI.call(this);
+        if (!object.isWall) {
+          this.physics.add.overlap(player, object, () => {
+            if (lastTriggeredObject !== object) {
+              lastTriggeredObject = object;
+              clickCount++;
+              waterUsage += waterData[object.type] || 0;
+              updateUI.call(this);
 
-            let soundKey;
-            switch (object.type) {
-              case 'Tap':
-                soundKey = 'tapSound';
-                break;
-              case 'Low-flow toilet':
-                soundKey = 'toiletSound';
-                break;
-              case 'Low-flow showerhead':
-                soundKey = 'showerSound';
-                break;
-              case 'Bathtub':
-                soundKey = 'bathtubSound';
-                break;
-              case 'Dishwasher':
-                soundKey = 'dishwasherSound';
-                break;
-              case 'Front-load washing machine':
-                soundKey = 'washing_machineSound';
-                break;
-              case 'Watering lawn':
-                soundKey = 'lawnSound';
-                break;
-              default:
-                soundKey = null;
-            }
-            if (soundKey) {
-              this.sound.play(soundKey);
-            }
+              let soundKey = {
+                'Tap': 'tapSound',
+                'Low-flow toilet': 'toiletSound',
+                'Low-flow showerhead': 'showerSound',
+                'Bathtub': 'bathtubSound',
+                'Dishwasher': 'dishwasherSound',
+                'Front-load washing machine': 'washing_machineSound',
+                'Watering lawn': 'lawnSound'
+              }[object.type];
 
-            if (waterUsage > dailyLimit) {
-              endGame.call(this, 'fail');
-            } else if (clickCount === 10 && waterUsage <= dailyLimit) {
-              endGame.call(this, 'success');
+              if (soundKey) this.sound.play(soundKey);
+
+              if (waterUsage > dailyLimit) endGame.call(this, 'fail');
+              else if (clickCount === 10 && waterUsage <= dailyLimit) endGame.call(this, 'success');
             }
-          }
-        });
+          });
+        }
       });
 
       waterUsageText = this.add.text(10, 10, `Water Usage: ${waterUsage}L`, { fontSize: '16px', fill: '#000' });
@@ -254,7 +224,6 @@ const WaterUsageGame = () => {
         player.setVelocityY(200);
         moving = true;
       }
-      // Manage footstep sound: if the player is moving and the footstep sound is not playing, play the looping footstep sound; otherwise, stop it
       if (moving) {
         if (!this.footstepSound.isPlaying) {
           this.footstepSound.play({ loop: true });
@@ -264,8 +233,6 @@ const WaterUsageGame = () => {
           this.footstepSound.stop();
         }
       }
-// Only update lastTriggeredObject when the player collides with another object 
-// No other reset actions are performed here
     }
 
     function updateUI() {
@@ -275,10 +242,7 @@ const WaterUsageGame = () => {
     }
 
     function endGame(result) {
-      const message =
-        result === 'fail'
-          ? 'Game Over! You used too much!'
-          : 'Congratulations! You passed!';
+      const message = result === 'fail' ? 'Game Over! You used too much!' : 'Congratulations! You passed!';
       this.add.text(200, 300, message, { fontSize: '32px', fill: '#000' });
       this.scene.pause();
     }
@@ -298,9 +262,9 @@ const WaterUsageGame = () => {
       const token = localStorage.getItem('token');
       if (token) {
         const gameData = {
-          dailyLimit: dailyLimit,
-          waterUsage: waterUsage,
-          clickCount: clickCount,
+          dailyLimit,
+          waterUsage,
+          clickCount,
           score: waterUsage,
           characterPosition: player ? { x: player.x, y: player.y } : { x: 0, y: 0 },
           dropdownData: dailyLimit,
@@ -322,11 +286,9 @@ const WaterUsageGame = () => {
 
   return (
     <div className="water-game-container">
-            <MusicPlayer audioSrc="/music/California.mp3" />
+      <MusicPlayer audioSrc="/music/California.mp3" />
       <div className="logout-button-container">
-        <button className="logout-button" onClick={() => navigate('/login')}>
-          Log Out
-        </button>
+        <button className="logout-button" onClick={() => navigate('/login')}>Log Out</button>
       </div>
 
       <div className="selection-box">
@@ -347,9 +309,7 @@ const WaterUsageGame = () => {
       <div className="game-area" ref={gameContainerRef}></div>
 
       <div className="main-menu-button-container">
-        <button className="main-menu-button" onClick={() => { playClickSound(); navigate('/menu'); }}>
-          Main Menu
-        </button>
+        <button className="main-menu-button" onClick={() => { playClickSound(); navigate('/menu'); }}>Main Menu</button>
       </div>
 
       {showTrialPopup && (
