@@ -21,7 +21,7 @@ const WaterUsageGame = () => {
     ? location.state.isLoggedIn 
     : (localStorage.getItem('token') ? true : false);
 
-  // Get dropdown menu data
+
 // Automatically set daily limit based on today's date
 useEffect(() => {
   const fetchAndSetMonthlyAverage = async () => {
@@ -257,9 +257,14 @@ useEffect(() => {
         </p>
       </div>
   
-      {/* 👇👇 ADD THIS BACK */}
+
       <div className="game-area" id="game-container" ref={gameContainerRef}></div>
-  
+        <div className="main-menu-button-container">
+        <button className="main-menu-button" onClick={() => { playClickSound(); navigate('/menu'); }}>
+          Main Menu
+        </button>
+      </div>
+
       {showTrialPopup && (
         <div className="trial-popup-overlay">
           <div className="trial-popup">
