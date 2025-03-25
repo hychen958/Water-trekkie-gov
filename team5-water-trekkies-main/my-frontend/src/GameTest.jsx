@@ -5,22 +5,22 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './GameTest.css';
 
 const WaterUsageGame = () => {
+  const location = useLocation(); // ✅ safe here
+  const navigate = useNavigate();
+  
   const gameContainerRef = useRef(null);
   const [dailyLimit, setDailyLimit] = useState(0);
   const [options, setOptions] = useState([]);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
   const [loadedGame, setLoadedGame] = useState(null);
-  // Separate the character state, with the initial value coming from location.state or a default value
-  const [character, setCharacter] = useState(
-    useLocation().state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
-  );
-  const navigate = useNavigate();
-  const location = useLocation();
   
+  const [character, setCharacter] = useState(
+    location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
+  );
+
   const isLoggedIn = (location.state?.isLoggedIn !== undefined)
     ? location.state.isLoggedIn 
     : (localStorage.getItem('token') ? true : false);
-
 
 // Automatically set daily limit based on today's date
 useEffect(() => {
