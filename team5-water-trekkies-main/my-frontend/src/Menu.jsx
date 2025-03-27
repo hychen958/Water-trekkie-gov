@@ -27,22 +27,14 @@ const Menu = () => {
     } else if (buttonName === 'Log Out') {
       console.log('Logging out...');
       navigate('/login');
+    } else if (buttonName === 'Quit') {
+      navigate('/login'); // Navigate to the login page when Quit is clicked
     }
   };
 
   return (
     <div className="menu-screen">
-            <MusicPlayer audioSrc="/music/Penn.mp3" />
-      {/* Log Out Button in the Top Right Corner */}
-      <div className="logout-button-container">
-        <button
-          className="logout-button"
-          onClick={() => handleClick('Log Out')}
-        >
-          Log Out
-        </button>
-      </div>
-
+      <MusicPlayer audioSrc="/music/Penn.mp3" />
       <div className="menu-container">
         <h1 className="menu-title">Main Menu</h1>
 
@@ -58,13 +50,16 @@ const Menu = () => {
         >
           Help
         </button>
+        {/* Add the Quit button below Help */}
+        <button
+          className="menu-button"
+          onClick={() => handleClick('Quit')}
+        >
+          Quit
+        </button>
       </div>
     </div>
   );
 };
 
 export default Menu;
-
-
-
-
