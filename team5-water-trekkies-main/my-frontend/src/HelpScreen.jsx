@@ -1,6 +1,6 @@
 // HelpScreen.jsx
 import React from 'react';
-import './Gametest.css';
+import './App.css';
 
 const clickSound = new Audio('/sounds/click.mp3');
 clickSound.volume = 0.5;
@@ -13,6 +13,17 @@ function HelpScreen({ onClose }) {
   return (
     <div className="trial-popup-overlay">
       <div className="trial-popup help-screen">
+        {/* ❌ X Close Icon Button */}
+        <button
+          className="close-button"
+          onClick={() => {
+            playClickSound();
+            onClose();
+          }}
+        >
+          &times;
+        </button>
+
         <h1 className="game-title">Welcome to the Water Conservation Game!</h1>
         <p className="instructions">
           Your mission is to manage daily water consumption and stay within the allocated limit.
@@ -50,18 +61,6 @@ function HelpScreen({ onClose }) {
             <tr><td>Watering lawn</td><td>950</td></tr>
           </tbody>
         </table>
-
-        <div className="main-menu-button-container">
-          <button
-            className="main-menu-button"
-            onClick={() => {
-              playClickSound();
-              onClose();
-            }}
-          >
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );
