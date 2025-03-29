@@ -25,5 +25,10 @@
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 800px;     /* ✅ 控制寬度 */
+    width: 90%;           /* ✅ 適應小螢幕 */
+    max-height: 90vh;     /* ✅ 控制高度 */
+    overflow-y: auto;     /* ✅ 若內容過多則可滾動 */
   }
   
