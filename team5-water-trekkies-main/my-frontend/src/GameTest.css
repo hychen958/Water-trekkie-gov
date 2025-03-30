@@ -29,7 +29,7 @@
     max-width: 800px;     /* ✅ width */
     width: 90%;           /* ✅ adaptable for small screen */
     max-height: 90vh;     /* ✅ hight */
-    overflow-y: hidden;     /* ✅ scroll up and down */
+    overflow-y: auto;     /* ✅ scroll up and down */
   }
   
   .close-button {
