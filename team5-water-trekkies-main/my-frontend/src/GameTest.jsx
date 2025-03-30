@@ -321,13 +321,26 @@ const WaterUsageGame = () => {
       {/* Phaser Game Container */}
       <div className="game-area" id="game-container" ref={gameContainerRef}></div>
 
-      {/* Main Menu Button */}
-      <div className="main-menu-button-container">
-        <button className="main-menu-button" onClick={() => { playClickSound(); navigate('/menu'); }}>
-          Main Menu
-        </button>
-      </div>
-
+      <div
+  className="button-overlay"
+  style={{
+    position: 'absolute',
+    top: '780px', 
+    left: '55%',
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    alignItems: 'center',
+  }}
+>
+  <button className="submit-btn" onClick={() => { playClickSound(); alert('Game Paused (not implemented yet)'); }}>
+    ⏸ Pause
+  </button>
+  <button className="submit-btn" onClick={() => { playClickSound(); navigate('/menu'); }}>
+    Main Menu
+  </button>
+</div>
       {/* Trial popup shown for guest users */}
       {showTrialPopup && (
         <div className="trial-popup-overlay">
