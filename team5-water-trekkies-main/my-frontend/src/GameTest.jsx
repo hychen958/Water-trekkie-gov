@@ -4,11 +4,10 @@ import Phaser from 'phaser';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './GameTest.css';
 import MusicPlayer from './MusicPlayer';
+import HelpScreen from './HelpScreen';
 
-// Initialize click sound for buttons
 const clickSound = new Audio('/sounds/click.mp3');
 clickSound.volume = 0.5;
-
 const playClickSound = () => {
   clickSound.currentTime = 0;
   clickSound.play();
@@ -19,22 +18,20 @@ const WaterUsageGame = () => {
   const navigate = useNavigate();
   const gameContainerRef = useRef(null);
 
-  // State for water usage goal and trial popup visibility
   const [dailyLimit, setDailyLimit] = useState(0);
   const [showTrialPopup, setShowTrialPopup] = useState(false);
   const [loadedGame, setLoadedGame] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
-  // Set selected character (either from navigation state or default)
   const [character, setCharacter] = useState(
     location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
   );
 
-  // Check if user is logged in (based on navigation state or token)
   const isLoggedIn = location.state?.isLoggedIn !== undefined
     ? location.state.isLoggedIn
     : !!localStorage.getItem('token');
 
-  // Fetch daily water usage limit (Calgary historical data)
   useEffect(() => {
     const fetchAndSetMonthlyAverage = async () => {
       try {
@@ -56,7 +53,6 @@ const WaterUsageGame = () => {
     fetchAndSetMonthlyAverage();
   }, []);
 
-  // Load previous game if user is logged in
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem('token');
@@ -79,7 +75,6 @@ const WaterUsageGame = () => {
     }
   }, [isLoggedIn]);
 
-  // Phaser game logic
   useEffect(() => {
     if (!dailyLimit || !gameContainerRef.current) return;
 
@@ -91,7 +86,6 @@ const WaterUsageGame = () => {
     let clickCount = loadedGame?.clickCount || 0;
     let lastTriggeredObject = null;
 
-    // Water usage values for different appliances/actions
     const waterData = {
       'Tap': 12,
       'Low-flow toilet': 6,
@@ -102,7 +96,6 @@ const WaterUsageGame = () => {
       'Watering lawn': 950,
     };
 
-    // Load assets
     function preload() {
       this.load.image('player', character.imgSrc);
       this.load.image('room', 'pics/room.jpg');
@@ -113,16 +106,12 @@ const WaterUsageGame = () => {
       this.load.image('dishwasher', 'pics/dishwasher.png');
       this.load.image('washing_machine', 'pics/washmachine.png');
       this.load.image('lawn', 'pics/lawn.png');
-
-      // Wall images
       this.load.image('1', 'pics/1.png');
       this.load.image('2', 'pics/2.png');
       this.load.image('3', 'pics/3.png');
       this.load.image('4', 'pics/4.png');
       this.load.image('5', 'pics/5.png');
       this.load.image('6', 'pics/6.png');
-
-      // Sounds for each item
       this.load.audio('tapSound', 'sounds/tap.mp3');
       this.load.audio('toiletSound', 'sounds/toilet.mp3');
       this.load.audio('showerSound', 'sounds/shower.mp3');
@@ -133,11 +122,10 @@ const WaterUsageGame = () => {
       this.load.audio('footstep', 'sounds/walk.mp3');
     }
 
-    // Setup game scene
     function create() {
+      window.phaserScene = this;
       this.add.image(400, 300, 'room');
 
-      // Create player
       player = this.physics.add.sprite(400, 300, 'player');
       player.setScale(0.4);
       player.setCollideWorldBounds(true);
@@ -150,7 +138,6 @@ const WaterUsageGame = () => {
       this.input.keyboard.enabled = true;
       cursors = this.input.keyboard.createCursorKeys();
 
-      // Setup interactive objects
       const items = [
         { key: 'tap', x: 100, y: 180, type: 'Tap' },
         { key: 'toilet', x: 700, y: 180, type: 'Low-flow toilet' },
@@ -167,7 +154,6 @@ const WaterUsageGame = () => {
         return obj;
       });
 
-      // Create collision walls
       const walls = [
         { key: '1', x: 232, y: 47 },
         { key: '2', x: 592, y: 47 },
@@ -181,7 +167,6 @@ const WaterUsageGame = () => {
         this.physics.add.collider(player, wallSprite);
       });
 
-      // Handle interaction with objects
       objects.forEach(object => {
         this.physics.add.overlap(player, object, () => {
           if (lastTriggeredObject !== object) {
@@ -190,7 +175,6 @@ const WaterUsageGame = () => {
             waterUsage += waterData[object.type] || 0;
             updateUI.call(this);
 
-            // Play item sound
             const soundKey = {
               'Tap': 'tapSound',
               'Low-flow toilet': 'toiletSound',
@@ -202,20 +186,17 @@ const WaterUsageGame = () => {
             }[object.type];
             if (soundKey) this.sound.play(soundKey);
 
-            // Check game end conditions
             if (waterUsage > dailyLimit) endGame.call(this, 'fail');
             else if (clickCount === 10 && waterUsage <= dailyLimit) endGame.call(this, 'success');
           }
         });
       });
 
-      // Display UI stats
       waterUsageText = this.add.text(10, 10, `Water Usage: ${waterUsage}L`, { fontSize: '16px', fill: '#000' });
       dailyLimitText = this.add.text(10, 30, `Daily Limit: ${dailyLimit}L`, { fontSize: '16px', fill: '#000' });
       scoreText = this.add.text(10, 50, `Score: ${dailyLimit - waterUsage}L`, { fontSize: '16px', fill: '#000' });
       clickCountText = this.add.text(10, 70, `Clicks Left: ${10 - clickCount}`, { fontSize: '16px', fill: '#000' });
 
-      // Trial mode restriction (pause after 60 seconds)
       if (!isLoggedIn) {
         trialModeTimeout = setTimeout(() => {
           this.scene.pause();
@@ -224,7 +205,6 @@ const WaterUsageGame = () => {
       }
     }
 
-    // Handle player movement
     function update() {
       if (!player) return;
       player.setVelocity(0);
@@ -253,21 +233,18 @@ const WaterUsageGame = () => {
       }
     }
 
-    // Update UI text
     function updateUI() {
       waterUsageText.setText(`Water Usage: ${waterUsage}L`);
       clickCountText.setText(`Clicks Left: ${10 - clickCount}`);
       scoreText.setText(`Score: ${dailyLimit - waterUsage}L`);
     }
 
-    // Display game result
     function endGame(result) {
       const message = result === 'fail' ? 'Game Over! You used too much!' : 'Congratulations! You passed!';
       this.add.text(200, 300, message, { fontSize: '32px', fill: '#000' });
       this.scene.pause();
     }
 
-    // Phaser game config
     const config = {
       type: Phaser.AUTO,
       width: 800,
@@ -279,7 +256,6 @@ const WaterUsageGame = () => {
 
     gameInstance = new Phaser.Game(config);
 
-    // Cleanup and save game state if logged in
     return () => {
       const token = localStorage.getItem('token');
       if (token) {
@@ -303,56 +279,92 @@ const WaterUsageGame = () => {
     };
   }, [dailyLimit, character, isLoggedIn, loadedGame]);
 
+  const handleSaveAndQuit = async () => {
+    playClickSound();
+    const token = localStorage.getItem('token');
+    if (token && window.phaserScene) {
+      const player = window.phaserScene.children.list.find(obj => obj.texture?.key === 'player');
+      const gameData = {
+        dailyLimit,
+        waterUsage: loadedGame?.waterUsage || 0,
+        clickCount: loadedGame?.clickCount || 0,
+        score: dailyLimit - (loadedGame?.waterUsage || 0),
+        characterPosition: player ? { x: player.x, y: player.y } : { x: 0, y: 0 },
+        dropdownData: dailyLimit,
+        selectedCharacter: character,
+      };
+      await fetch('http://localhost:5000/api/game/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(gameData),
+      });
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+  };
+
   return (
     <div className="water-game-container">
       <MusicPlayer audioSrc="/music/California.mp3" />
 
-      {/* Logout Button */}
       <div className="logout-button-container">
         <button className="logout-button" onClick={() => navigate('/login')}>Log Out</button>
       </div>
 
-      {/* Display water goal for the day */}
       <div className="selection-box">
         <h3>Your water challenge today is based on the average daily consumption for this day in history.</h3>
         <p><strong>{Math.round(dailyLimit)}L</strong> is your target for today.</p>
       </div>
 
-      {/* Phaser Game Container */}
       <div className="game-area" id="game-container" ref={gameContainerRef}></div>
 
-      <div
-  className="button-overlay"
-  style={{
-    position: 'absolute',
-    top: '780px', 
-    left: '55%',
-    transform: 'translateX(-50%)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    alignItems: 'center',
-  }}
->
-  <button className="submit-btn" onClick={() => { playClickSound(); alert('Game Paused (not implemented yet)'); }}>
-    ⏸ Pause
-  </button>
-  <button className="submit-btn" onClick={() => { playClickSound(); navigate('/menu'); }}>
-    Main Menu
-  </button>
-</div>
-      {/* Trial popup shown for guest users */}
+      {!isPaused && (
+        <div
+          className="button-overlay"
+          style={{
+            position: 'absolute',
+            top: '780px',
+            left: '55%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            alignItems: 'center',
+          }}
+        >
+          <button className="submit-btn" onClick={() => { playClickSound(); setIsPaused(true); if (window.phaserScene) window.phaserScene.scene.pause(); }}>
+            ⏸ Pause
+          </button>
+          <button className="submit-btn" onClick={() => { playClickSound(); navigate('/menu'); }}>
+            Main Menu
+          </button>
+        </div>
+      )}
+
+{isPaused && (
+        <div className="trial-popup-overlay">
+          <div className="trial-popup" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+            <h2>Game Paused</h2>
+            <p>The game is currently paused. Choose an option below:</p>
+            <button className="submit-btn" onClick={() => { playClickSound(); setIsPaused(false); if (window.phaserScene) window.phaserScene.scene.resume(); }}>▶ Resume</button>
+            <button className="submit-btn" onClick={() => { playClickSound(); setShowHelp(true); }}>❓ Help</button>
+            <button className="submit-btn" onClick={handleSaveAndQuit}>💾 Save & Quit</button>
+          </div>
+        </div>
+      )}
+
+      {showHelp && <HelpScreen onClose={() => setShowHelp(false)} />}
+
       {showTrialPopup && (
         <div className="trial-popup-overlay">
           <div className="trial-popup">
             <h2>Thank you for playing, signup to play more!</h2>
             <button onClick={() => navigate('/login')}>Go to Login</button>
           </div>
-        </div> 
+        </div>
       )}
     </div>
   );
 };
 
 export default WaterUsageGame;
-
