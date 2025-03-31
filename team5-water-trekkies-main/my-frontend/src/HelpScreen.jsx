@@ -24,11 +24,20 @@ function HelpScreen({ onClose }) {
           &times;
         </button>
 
-        <h1 className="game-title">Welcome to the Water Conservation Game!</h1>
+        <h1 className="game-title">Welcome to the Water Trekkies!</h1>
         <p className="instructions">
           Your mission is to manage daily water consumption and stay within the allocated limit.
         </p>
+
+        <h2 className="section-title">Purpose of the Game:</h2>
+        <p>This is an educational and interactive game designed to raise awareness about responsible water usage. Players navigate a household environment, interact with various water-consuming appliances, and make daily choices to stay within their allocated water limit—based on real historical consumption data from Calgary.
+
+By simulating real-life water usage behaviors and incorporating gamified decision-making, the game encourages players to develop habits that contribute to sustainable water consumption.
+
+</p>
         <h2 className="section-title">Key Game Rules:</h2>
+
+        
         <ul className="game-rules">
           <li>You start with a daily water limit, based on average consumption data.</li>
           <li>Move your character to interact with household objects.</li>
@@ -39,9 +48,9 @@ function HelpScreen({ onClose }) {
         </ul>
         <h2 className="section-title">Navigation Controls:</h2>
         <ul className="navigation-controls">
-          <li>
+          <p>
             Use the <strong>arrow keys</strong> on your keyboard to move your character.
-          </li>
+          </p>
         </ul>
 
         <table className="water-usage-table">
