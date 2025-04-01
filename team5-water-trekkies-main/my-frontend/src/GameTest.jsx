@@ -93,34 +93,41 @@ const WaterUsageGame = () => {
 
     // Water usage values for different appliances/actions
     const waterData = {
-      'Tap': 12,
-      'Low-flow toilet': 6,
-      'Low-flow showerhead': 40,
-      'Bathtub': 80,
+      'kitchensink': 12,
+      'Toilet': 6,
+      'showerHead': 40,
+      'TubExterior': 80,
       'Dishwasher': 35,
-      'Front-load washing machine': 65,
-      'Watering lawn': 950,
+      'WasherFront': 65,
+      // 'Watering lawn': 950, *for later development*
     };
 
     // Load assets
     function preload() {
       this.load.image('player', character.imgSrc);
-      this.load.image('room', 'pics/room.jpg');
-      this.load.image('tap', 'pics/tap.png');
-      this.load.image('toilet', 'pics/toilet.png');
+      this.load.image('room', 'pics/room.png');
+      this.load.image('kitchenSink', 'pics/kitchenSink.png');
+      this.load.image('toilet', 'pics/toiletClose.png');
       this.load.image('shower', 'pics/shower.png');
-      this.load.image('bathtub', 'pics/bathtub.png');
-      this.load.image('dishwasher', 'pics/dishwasher.png');
-      this.load.image('washing_machine', 'pics/washmachine.png');
-      this.load.image('lawn', 'pics/lawn.png');
+      this.load.image('tubExterior', 'pics/tubExterior.png');
+      this.load.image('dishwasher', 'pics/dishwasherClose.png');
+      this.load.image('washerFront', 'pics/washerFront.png');
+      // this.load.image('washingMachineBack', 'pics/washerBack.png');
+      // this.load.image('toiletopen', 'pics/toiletOpen');
+      // this.load.image('dishwasherOpen', 'pics/dishwasherOpen.png');
+      // this.load.image('dishWasherClose', 'pics/dishwasherClose.png');
+      // this.load.image('TubExterior' , 'pics/TubExterior.png');
+      // this.load.image('tubEmpty' , 'pics/tubBottomEmpty.png');
+      // this.load.image('tubFull' , 'pics/tubBottomFull.png');
+      // this.load.image('lawn', 'pics/lawn.png');
 
       // Wall images
-      this.load.image('1', 'pics/1.png');
-      this.load.image('2', 'pics/2.png');
-      this.load.image('3', 'pics/3.png');
-      this.load.image('4', 'pics/4.png');
-      this.load.image('5', 'pics/5.png');
-      this.load.image('6', 'pics/6.png');
+      this.load.image('W1', 'pics/W1.png');
+      this.load.image('W2', 'pics/W2.png');
+      this.load.image('W3', 'pics/W3.png');
+      this.load.image('W4', 'pics/W4.png');
+      this.load.image('W5', 'pics/W5.png');
+      this.load.image('W6', 'pics/W6.png');
 
       // Sounds for each item
       this.load.audio('tapSound', 'sounds/tap.mp3');
@@ -152,13 +159,13 @@ const WaterUsageGame = () => {
 
       // Setup interactive objects
       const items = [
-        { key: 'tap', x: 100, y: 180, type: 'Tap' },
-        { key: 'toilet', x: 700, y: 180, type: 'Low-flow toilet' },
-        { key: 'shower', x: 100, y: 500, type: 'Low-flow showerhead' },
-        { key: 'bathtub', x: 700, y: 500, type: 'Bathtub' },
-        { key: 'dishwasher', x: 500, y: 100, type: 'Dishwasher' },
-        { key: 'washing_machine', x: 300, y: 100, type: 'Front-load washing machine' },
-        { key: 'lawn', x: 410, y: 550, type: 'Watering lawn' },
+        { key: 'kitchenSink', x: 112, y: 50, type: 'kitchensink' },
+        { key: 'toilet', x: 646, y: 326, type: 'Toilet' },
+        { key: 'shower', x: 753, y: 318, type: 'showerHead' },
+        { key: 'tubExterior', x: 670, y: 560, type: 'TubExterior' },
+        { key: 'dishwasher', x: 41, y: 72, type: 'Dishwasher' },
+        { key: 'washerFront', x: 675, y: 263, type: 'WasherFront' },
+        // { key: 'lawn', x: 410, y: 550, type: 'Watering lawn' }, *for later development*
       ];
 
       const objects = items.map(item => {
@@ -169,12 +176,13 @@ const WaterUsageGame = () => {
 
       // Create collision walls
       const walls = [
-        { key: '1', x: 232, y: 47 },
-        { key: '2', x: 592, y: 47 },
-        { key: '3', x: 232, y: 360 },
-        { key: '4', x: 592, y: 359 },
-        { key: '5', x: 105, y: 351 },
-        { key: '6', x: 720, y: 330 },
+        { key: 'W1', x: 288, y: 222 }, //topLeft
+        { key: 'W2', x: 609, y: 222 }, //topRight
+        { key: 'W3', x: 610, y: 346 }, //middleRight
+        { key: 'W4', x: 287, y: 348 }, //middleLeft
+        { key: 'W5', x: 608, y: 590 }, //bottomRight
+        { key: 'W6', x: 288, y: 590 }, //bottomLeft
+
       ];
       walls.forEach(wall => {
         const wallSprite = this.physics.add.staticImage(wall.x, wall.y, wall.key);
@@ -192,13 +200,14 @@ const WaterUsageGame = () => {
 
             // Play item sound
             const soundKey = {
-              'Tap': 'tapSound',
-              'Low-flow toilet': 'toiletSound',
-              'Low-flow showerhead': 'showerSound',
-              'Bathtub': 'bathtubSound',
+              'kitchensink': 'tapSound',
+              'toilet': 'toiletSound',
+              'showerhead': 'showerSound',
+              'TubExterior': 'bathtubSound',
               'Dishwasher': 'dishwasherSound',
-              'Front-load washing machine': 'washing_machineSound',
-              'Watering lawn': 'lawnSound',
+              'WasherFront': 'washing_machineSound',
+              // 'Watering lawn': 'lawnSound', *for later development*
+              
             }[object.type];
             if (soundKey) this.sound.play(soundKey);
 
@@ -271,9 +280,9 @@ const WaterUsageGame = () => {
     const config = {
       type: Phaser.AUTO,
       width: 800,
-      height: 600,
+      height: 640,
       parent: gameContainerRef.current,
-      physics: { default: 'arcade', arcade: { debug: false } },
+      physics: { default: 'arcade', arcade: { debug: true } },
       scene: { preload, create, update },
     };
 
