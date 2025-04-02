@@ -20,33 +20,10 @@
   
   /* Popup content */
   .trial-popup {
-    position: relative; /*  close button  */
     background: #fff;
-    padding: 30px;
-    border-radius: 10px;
+    padding: 20px;
+    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-    max-width: 800px;     /* ✅ width */
-    width: 90%;           /* ✅ adaptable for small screen */
-    max-height: 90vh;     /* ✅ hight */
-    overflow-y: auto;     /* ✅ scroll up and down */
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    z-index: 10;
-    transition: color 0.3s ease;
-  }
-  
-  .close-button:hover {
-    color: #ff3333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
   
