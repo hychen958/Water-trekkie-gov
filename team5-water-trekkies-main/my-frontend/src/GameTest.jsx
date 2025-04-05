@@ -25,7 +25,6 @@ const WaterUsageGame = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [waterUsage, setWaterUsage] = useState(0);
   const [clickCount, setClickCount] = useState(0);
-  const [volumeOn, setVolumeOn] = useState(true);
 
   const [character, setCharacter] = useState(
     location.state?.selectedCharacter || { name: 'Default', imgSrc: 'pics/char1.png' }
@@ -184,7 +183,7 @@ const WaterUsageGame = () => {
               'Dishwasher': 'dishwasherSound',
               'WasherFront': 'washing_machineSound',
             }[object.type];
-            if (soundKey && volumeOn) this.sound.play(soundKey);
+            if (soundKey) this.sound.play(soundKey);
           }
         });
       });
@@ -218,9 +217,9 @@ const WaterUsageGame = () => {
         moving = true;
       }
 
-      if (moving && volumeOn && !this.footstepSound.isPlaying) {
+      if (moving && !this.footstepSound.isPlaying) {
         this.footstepSound.play({ loop: true });
-      } else if ((!moving || !volumeOn) && this.footstepSound.isPlaying) {
+      } else if (!moving && this.footstepSound.isPlaying) {
         this.footstepSound.stop();
       }
     }
@@ -263,20 +262,13 @@ const WaterUsageGame = () => {
       if (trialModeTimeout) clearTimeout(trialModeTimeout);
       if (gameInstance) gameInstance.destroy(true);
     };
-  }, [dailyLimit, character, isLoggedIn, loadedGame, volumeOn]);
+  }, [dailyLimit, character, isLoggedIn, loadedGame]);
 
   return (
     <div className="water-game-container">
       <MusicPlayer audioSrc="/music/California.mp3" />
 
       <div className="left-ui">
-        <div className="volume-panel">
-          <p>🔊 Volume</p>
-          <label className="switch">
-            <input type="checkbox" checked={volumeOn} onChange={() => setVolumeOn(!volumeOn)} />
-            <span className="slider round"></span>
-          </label>
-        </div>
         <div className="scoreboard-panel">
           <p>Water Usage: {Math.round(waterUsage)}L</p>
           <p>Daily Limit: {Math.round(dailyLimit)}L</p>
