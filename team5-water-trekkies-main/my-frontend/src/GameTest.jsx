@@ -214,7 +214,16 @@ const WaterUsageGame = () => {
               // 'Watering lawn': 'lawnSound', *for later development*
               
             }[object.type];
-            if (soundKey) this.sound.play(soundKey);
+            if (soundKey) {
+              const sound = this.sound.add(soundKey);
+              sound.play();
+            
+              
+              setTimeout(() => {
+                sound.stop();
+                sound.destroy(); 
+              }, 1000); 
+            }
 
             // End the game if water usage exceeds the daily limit or after 10 clicks
             if (waterUsage > dailyLimit) endGame.call(this, 'fail');
